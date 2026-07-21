@@ -22,15 +22,15 @@ export default function DetailedSection() {
             style={{
               fontFamily: "'Cormorant Garamond', 'Playfair Display', Georgia, serif",
               fontStyle: 'normal',
-              fontWeight: 500,
-              fontSize: 'clamp(2.75rem, 4vw, 4.5rem)',
+              fontWeight: 700,
+              fontSize: 'clamp(2.75rem, 4vw, 4.6rem)',
               lineHeight: 1.05,
             }}
           >
             Where your mind & heart feel at home.
           </h2>
 
-          <p className="mx-auto mt-10 max-w-xl text-base leading-relaxed text-neutral-800 sm:text-lg lg:mx-0 lg:mt-14 xl:mt-16 xl:max-w-2xl xl:text-xl">
+          <p className="mx-auto mt-10 max-w-xl text-base leading-relaxed text-neutral-800 sm:text-lg lg:mx-0 lg:mt-14 xl:mt-16 xl:max-w-2xl ">
             Life doesn't come with a manual for handling stress, relationships, overwhelming emotions, or life transitions. At Mindfully You, we help you understand yourself better through science-backed emotional wellness services that empower you to heal, grow, and thrive. 
 Whether you're seeking clarity, emotional healing, stronger relationships, or lifelong emotional well-being, we're here to support your journey. 
           </p>
