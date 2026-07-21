@@ -8,7 +8,7 @@ export default function HeroSection() {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_90%_at_50%_0%,rgba(0,0,0,0.06)_0%,rgba(0,0,0,0)_55%)]" />
 
       {/* Hero content */}
-      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 text-center">
+      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 text-center md:pt-24 ">
         <h1 className="2xl:max-w-5xl max-w-3xl text-5xl md:text-[70px] 2xl:text-[110px] text-[#3F4A33] ">
           Emotional Wellness, Designed for Real Life.
         </h1>

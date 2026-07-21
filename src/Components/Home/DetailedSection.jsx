@@ -37,7 +37,7 @@ Whether you're seeking clarity, emotional healing, stronger relationships, or li
 
           <button
             type="button"
-            className="mt-8 rounded-full bg-[#E46F83]  px-8 py-3.5 text-sm font-medium tracking-wide text-white transition-colors hover:bg-[#6b7362] sm:text-base lg:mt-10"
+            className="mt-8 rounded-full bg-[#E46F83]  px-8 py-3.5 text-sm font-medium tracking-wide text-white transition-colors hover:bg-[#e0556c] sm:text-base lg:mt-10"
           >
             Book a Discovery Session
           </button>
