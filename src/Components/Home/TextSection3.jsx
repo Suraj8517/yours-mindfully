@@ -57,7 +57,7 @@ export default function TextSection() {
         }}
       />
       <h2
-        className="relative z-10 text-[100px] leading-tight text-center max-w-6xl text-[#E46F83] will-change-transform"
+        className="relative z-10 text-[60px] 2xl:text-[100px] leading-tight text-center max-w-4xl 2xl:max-w-6xl text-[#E46F83] will-change-transform"
         style={{ transform: `translateY(${-scrollY * 0.06}px)` }}
       >
         Understand yourself, strengthen relationships, and thrive with confidence.

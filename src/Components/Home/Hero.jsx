@@ -9,11 +9,11 @@ export default function HeroSection() {
 
       {/* Hero content */}
       <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 text-center">
-        <h1 className="max-w-5xl text-5xl md:text-6xl lg:text-[110px] text-[#3F4A33] ">
+        <h1 className="2xl:max-w-5xl max-w-3xl text-5xl md:text-[70px] 2xl:text-[110px] text-[#3F4A33] ">
           Emotional Wellness, Designed for Real Life.
         </h1>
 
-        <p className="mt-12 text-lg md:text-2xl text-[#3F4A33]/80 max-w-xl">
+        <p className="2xl:mt-12 mt-6 text-lg 2xl:text-2xl  text-[#3F4A33]/80 max-w-xl">
           Understand Yourself. Heal Emotional Patterns. Build Meaningful Relationships. Live with Clarity.
         </p>
 
