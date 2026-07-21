@@ -2,6 +2,7 @@ import React from 'react'
 import HeroSection from '../Components/Home/Hero'
 import InfiniteImageStrip from '../Components/Home/ImageScroll'
 import TextSection from '../Components/Home/TextSection3'
+import DetailedSection from '../Components/Home/DetailedSection'
 
 export default function Home
 () {
@@ -10,6 +11,7 @@ export default function Home
         <HeroSection/>
          <InfiniteImageStrip/>
          <TextSection/>
+         <DetailedSection/>
     </div>
   )
 }
