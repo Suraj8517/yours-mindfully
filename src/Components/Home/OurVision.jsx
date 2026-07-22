@@ -75,7 +75,7 @@ const CONTENT_START = SIDE_EXIT_END; // 0.6 — left-side content starts fading 
 const CONTENT_END = 0.8; // left-side content fully visible, portrait still locked
 
 const PORTRAIT_EXIT_START = CONTENT_END; // 0.8 — portrait + left content finally release
-const PORTRAIT_EXIT_END = 1.0; // fully exited exactly as the section's scroll room ends
+const PORTRAIT_EXIT_END = 1; // fully exited exactly as the section's scroll room ends
 
 // The last STAGES entry has no "next" threshold to fade out against (it
 // just fades in and stays), so we give it its own progress-based exit
@@ -238,12 +238,14 @@ export default function OurVisionGallery() {
       const portraitExitY = lerp(0, -PORTRAIT_EXIT_DISTANCE, easedPortraitExitT);
 
       if (leftContentRef.current) {
-        const contentSlideX = lerp(-CONTENT_SLIDE_DISTANCE, 0, easedContentInT);
+        const contentSlideY = lerp(CONTENT_SLIDE_DISTANCE, 0, easedContentInT);
         leftContentRef.current.style.opacity =
           easedContentInT * (1 - easedPortraitExitT);
         leftContentRef.current.style.visibility =
           contentInT > 0 ? "visible" : "hidden";
-        leftContentRef.current.style.transform = `translate(${contentSlideX}px, ${portraitExitY}px)`;
+        leftContentRef.current.style.transform = `translateY(${
+  contentSlideY + portraitExitY
+}px)`;
       }
 
       // Portrait: rises once, holds while the side images exit and the left

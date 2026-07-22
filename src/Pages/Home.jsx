@@ -5,6 +5,7 @@ import TextSection from '../Components/Home/TextSection3'
 import DetailedSection from '../Components/Home/DetailedSection'
 import AboutUs from '../Components/Home/AboutUs'
 import OurVision from '../Components/Home/OurVision'
+import FaqSection from '../Components/Home/FAQSection'
 
 
 export default function Home
@@ -16,7 +17,10 @@ export default function Home
          <TextSection/>
          <DetailedSection/>
          <AboutUs/>  
-         <OurVision/>   
+         <OurVision/>  
+        <div className="relative z-30 -translate-y-[40vh]">
+    <FaqSection />
+  </div>
     </div>
   )
 }
