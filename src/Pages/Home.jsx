@@ -6,7 +6,7 @@ import DetailedSection from '../Components/Home/DetailedSection'
 import AboutUs from '../Components/Home/AboutUs'
 import OurVision from '../Components/Home/OurVision'
 import FaqSection from '../Components/Home/FAQSection'
-
+import OurPillars from '../Components/Home/OurPillars'
 
 export default function Home
 () {
@@ -15,12 +15,13 @@ export default function Home
         <HeroSection/>
          <InfiniteImageStrip/>
          <TextSection/>
-         <DetailedSection/>
-         <AboutUs/>  
+         <DetailedSection/> 
          <OurVision/>  
-        <div className="relative z-30 -translate-y-[40vh]">
-    <FaqSection />
+        <div className="relative z-30 sm:-translate-y-[40vh]">
+   <AboutUs/>  
   </div>
+  <OurPillars/>
+    <FaqSection />
     </div>
   )
 }

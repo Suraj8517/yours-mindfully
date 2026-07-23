@@ -10,53 +10,27 @@ export default function Navbar() {
   return (
     <header className="absolute inset-x-0 top-0 z-50 w-full bg-transparent">
       <nav className="mx-auto flex max-w-[1600px] items-center justify-between px-6 py-5 sm:px-8 md:px-10 lg:px-14 xl:px-20">
-        {/* Left — links (desktop) / hamburger (mobile) */}
-        <div className="flex items-center">
-          <ul className="hidden items-center gap-8 md:flex xl:gap-10">
-            {NAV_LINKS.map((link) => (
-              <li key={link}>
-                <a
-                  href={`#${link.toLowerCase()}`}
-                  className="text-sm font-medium tracking-wide text-white/90 transition-colors hover:text-white xl:text-base"
-                >
-                  {link}
-                </a>
-              </li>
-            ))}
-          </ul>
-
-          <button
-            type="button"
-            onClick={() => setOpen((v) => !v)}
-            aria-label="Toggle menu"
-            aria-expanded={open}
-            className="flex flex-col items-center justify-center gap-1.5 md:hidden"
-          >
-            <span
-              className={`block h-[1.5px] w-6 bg-white transition-transform duration-300 ${
-                open ? 'translate-y-[7px] rotate-45' : ''
-              }`}
-            />
-            <span
-              className={`block h-[1.5px] w-6 bg-white transition-opacity duration-300 ${
-                open ? 'opacity-0' : 'opacity-100'
-              }`}
-            />
-            <span
-              className={`block h-[1.5px] w-6 bg-white transition-transform duration-300 ${
-                open ? '-translate-y-[7px] -rotate-45' : ''
-              }`}
-            />
-          </button>
-        </div>
-
-        {/* Center — logo */}
+        {/* Logo — static on the left for mobile, absolutely centered on desktop */}
         <a
           href="#home"
-          className="absolute left-1/2 flex -translate-x-1/2 flex-col items-center text-white"
+          className="flex items-center text-white md:absolute md:left-1/2 md:-translate-x-1/2"
         >
-     <img src={logo} className='w-18'/>
+          <img src={logo} className="w-14 md:w-18" />
         </a>
+
+        {/* Desktop nav links */}
+        <ul className="hidden items-center gap-8 md:flex xl:gap-10">
+          {NAV_LINKS.map((link) => (
+            <li key={link}>
+              <a
+                href={`#${link.toLowerCase()}`}
+                className="text-sm font-medium tracking-wide text-white/90 transition-colors hover:text-white xl:text-base"
+              >
+                {link}
+              </a>
+            </li>
+          ))}
+        </ul>
 
         {/* Right — CTA (desktop) */}
         <div className="hidden md:block">
@@ -68,8 +42,30 @@ export default function Navbar() {
           </a>
         </div>
 
-        {/* Mobile spacer so hamburger/logo layout stays balanced */}
-        <div className="w-6 md:hidden" />
+        {/* Hamburger — mobile, right side */}
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          aria-label="Toggle menu"
+          aria-expanded={open}
+          className="flex flex-col items-center justify-center gap-1.5 md:hidden"
+        >
+          <span
+            className={`block h-[1.5px] w-6 bg-white transition-transform duration-300 ${
+              open ? 'translate-y-[7px] rotate-45' : ''
+            }`}
+          />
+          <span
+            className={`block h-[1.5px] w-6 bg-white transition-opacity duration-300 ${
+              open ? 'opacity-0' : 'opacity-100'
+            }`}
+          />
+          <span
+            className={`block h-[1.5px] w-6 bg-white transition-transform duration-300 ${
+              open ? '-translate-y-[7px] -rotate-45' : ''
+            }`}
+          />
+        </button>
       </nav>
 
       {/* Mobile dropdown menu */}

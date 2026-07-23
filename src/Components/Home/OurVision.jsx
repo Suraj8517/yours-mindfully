@@ -133,6 +133,10 @@ export default function OurVisionGallery() {
   const rafId = useRef(null);
 
   useEffect(() => {
+    // Mobile gets a plain static layout (see the mobile-only markup below) —
+    // skip all the scroll-driven animation work entirely there.
+    if (!window.matchMedia("(min-width: 768px)").matches) return;
+
     const computeTarget = () => {
       const el = wrapperRef.current;
       if (!el) return;
@@ -295,7 +299,42 @@ export default function OurVisionGallery() {
   }, []);
 
   return (
-    <section ref={wrapperRef} className="relative h-[450vh] w-full bg-white">
+    <>
+    {/* Mobile — plain static layout, no scroll animation, blob as background art */}
+    <section className="relative block w-full overflow-hidden bg-[#FCFBF8] px-6 py-16 md:hidden">
+    
+      <div className="relative z-10 flex flex-col items-center gap-6 text-center">
+        <h1 className="text-4xl font-black text-green-900">Our Vision</h1>
+        <p className="max-w-sm font-serif text-xl leading-snug text-neutral-900">
+          To make emotional wellness simple, meaningful, and accessible while
+          helping individuals build resilience, clarity, and emotional
+          balance.
+        </p>
+
+        <div className="mt-4 flex items-end justify-center gap-4">
+          <img
+            src={portraitImg}
+            alt=""
+            className="h-[300px] w-[220px] flex-shrink-0 rounded-2xl object-cover"
+          />
+        
+        </div>
+
+        <div className="mt-8 max-w-sm">
+          <h3 className="font-serif text-2xl leading-snug text-neutral-900">
+            Our Mission
+          </h3>
+          <p className="mt-3 text-base leading-relaxed text-neutral-700">
+            To empower people to understand themselves deeply, embrace their
+            emotions with compassion, and create healthier, more fulfilling
+            lives.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    {/* Desktop — existing scroll-driven animated version, untouched */}
+    <section ref={wrapperRef} className="relative hidden h-[450vh] w-full bg-[#FCFBF8] md:block">
       <div className="sticky top-0 h-screen w-full overflow-hidden">
 
         <div
@@ -325,7 +364,7 @@ export default function OurVisionGallery() {
             ref={portraitRef}
             src={portraitImg}
             alt=""
-            className="h-[400px] w-[320px] flex-shrink-0 rounded-2xl object-cover will-change-transform md:h-[480px] md:w-[400px] 2xl:h-[780px] 2xl:w-[680px]"
+            className="h-[400px] w-[320px] flex-shrink-0 rounded-2xl object-cover will-change-transform md:h-[560px] md:w-[500px] 2xl:h-[780px] 2xl:w-[680px]"
           />
           <img
             ref={(node) => (sideRefs.current[3] = node)}
@@ -398,5 +437,6 @@ export default function OurVisionGallery() {
         </div>
       </div>
     </section>
+    </>
   );
 }

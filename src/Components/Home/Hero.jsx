@@ -3,7 +3,7 @@ import InfiniteImageStrip from "./ImageScroll";
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-[90vh] w-full overflow-hidden flex flex-col bg-[linear-gradient(180deg,#C8D8B2_0%,#D4E2C4_25%,#E1EAD8_50%,#EEF4E7_75%,#EEF4E7_100%)]">
+    <section className="relative min-h-[60vh] sm:min-h-[90vh] w-full overflow-hidden flex flex-col bg-[linear-gradient(180deg,#C8D8B2_0%,#D4E2C4_25%,#E1EAD8_50%,#EEF4E7_75%,#EEF4E7_100%)]">
       {/* soft vignette, same treatment as before, tuned to the green palette */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_90%_at_50%_0%,rgba(0,0,0,0.06)_0%,rgba(0,0,0,0)_55%)]" />
 
