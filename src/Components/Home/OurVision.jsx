@@ -1,11 +1,8 @@
 // OurVisionGallery.jsx
 import { useEffect, useRef } from "react";
 import blobImage from "../../assets/blob.png";
-import sugarImg from "../../assets/img5.jpg";
-import glovesImg from "../../assets/img3.jpg";
-import petriImg from "../../assets/img4.jpg";
 import portraitImg from "../../assets/img2.jpg";
-import rootsImg from "../../assets/img6.jpg";
+import leafImg from '../../assets/leaf.png' 
 
 const STAGES = [
   {
@@ -19,75 +16,40 @@ const STAGES = [
   {
     threshold: 0.34,
     text: (
-      <>
+      <h3 className="text-lg">
         To make emotional wellness simple, meaningful, 
-      </>
+      </h3>
     ),
   },
   {
     threshold: 0.68,
     text: (
-      <>
+      <h3 className="text-lg">
         and accessible while helping individuals build resilience, clarity, and emotional balance.
-      </>
+      </h3>
     ),
   },
 ];
 
-// --- Phase boundaries, all expressed as fractions of this section's total
-// scroll progress (0–1).
-//
-// Phase 1 [0 -> BLOB_GROW_END]: blob grows + rotates in place, text cycles.
-// The blob is fully opaque here.
-//
-// Phase 2 [RISE_START -> RISE_END]: the moment growth finishes, the blob
-// (and its text) starts translating upward, in sync with the gallery
-// images rising up from below the viewport. They move together as one
-// motion. The last stage's text also finishes fading out over this same
-// window (see TEXT_EXIT_START / TEXT_EXIT_END below), so it doesn't stay
-// pinned at full opacity once the blob starts moving.
-//
-// Phase 3 [SIDE_EXIT_START -> SIDE_EXIT_END]: all 5 gallery images
-// (including the portrait — nothing locks in place anymore) keep rising
-// further and exit upward off-screen together. The blob keeps moving
-// upward through this phase too, until it's carried off the top of the
-// sticky viewport. It also fades to a little transparent, starting once
-// the blob has finished growing (BLOB_GROW_END), controlled by
-// BLOB_MIN_OPACITY.
+// --- Only phase left: the blob grows + rotates in place over
+// [0 -> BLOB_GROW_END], and the text cycles through STAGES in sync with it.
+// BLOB_GROW_END is pushed out further (and SMOOTHING lowered) so the grow
+// animation feels slower/softer, while the section itself is shorter since
+// there's no gallery-rise/exit phase left to make room for.
 
-const BLOB_GROW_END = 0.2; // blob finishes growing + text finishes cycling by here
-
-const RISE_START = BLOB_GROW_END; // 0.2 — blob + gallery start moving together right here
-const RISE_END = 0.38; // gallery fully settled into its row position
-
-const SIDE_EXIT_START = 0.42; // all 5 images (and the blob) rise further and exit
-const SIDE_EXIT_END = 1; // exit now runs all the way to the end of scroll, so nothing
-// sits fully-exited-but-still-pinned for a stretch of dead scroll before the
-// sticky section releases — the last bit of exit motion finishes right as it does
-
-// The last STAGES entry has no "next" threshold to fade out against (it
-// just fades in and stays), so we give it its own progress-based exit
-// window here, timed to finish right as the blob starts lifting off.
-const TEXT_EXIT_START = BLOB_GROW_END; // 0.2 — starts fading right as growth ends
-const TEXT_EXIT_END = RISE_END; // 0.38 — fully gone by the time the gallery settles
+const BLOB_GROW_END = 0.65; // blob finishes growing + text finishes cycling by here
 
 const MIN_SIZE = 460;
-const MAX_SIZE = 960;
+const MAX_SIZE = 620;
 const MAX_ROTATION = 90;
 const FADE_WINDOW = 0.12;
-const SMOOTHING = 0.08;
+const SMOOTHING = 0.045; // lower = more lag between scroll and motion = slower feel
 
-const RISE_DISTANCE = 420; // how far below their resting spot the gallery images start
-const EXIT_DISTANCE = 900; // how far up the gallery images travel as they exit
-
-const BLOB_RISE_DISTANCE = 300; // how far the blob moves up while the gallery rises into view
-const BLOB_EXIT_DISTANCE = 900; // how much further the blob continues up during the exit phase
-const BLOB_MIN_OPACITY = 0.25; // how transparent the blob gets by the very end (1 = no fade)
-const BLOB_EXTRA_GAP = 160; // additional lift, eased in together with the rise motion, to open
-// up more space above the gallery once things have settled. Unlike a static
-// offset applied at every progress value, this is 0 at rest/entry
-// (progress 0), so it can never overlap the previous section — it only
-// grows in as the blob actually rises (same easedRiseT as BLOB_RISE_DISTANCE).
+// How far the leaves drift while the section is pinned, as a fraction of
+// scroll progress (0 -> 1 across the whole pin). Different rates per leaf
+// give a subtle depth/parallax feel rather than moving as one flat layer.
+const LEAF_TOP_DRIFT = 40; // px
+const LEAF_BOTTOM_DRIFT = 60; // px
 
 function lerp(a, b, t) {
   return a + (b - a) * t;
@@ -95,58 +57,24 @@ function lerp(a, b, t) {
 function clamp01(v) {
   return Math.min(1, Math.max(0, v));
 }
-function easeOutCubic(t) {
-  return 1 - Math.pow(1 - t, 3);
-}
-function easeInCubic(t) {
-  return t * t * t;
-}
 
 export default function OurVisionGallery() {
   const wrapperRef = useRef(null);
-  const blobLayerRef = useRef(null); // handles the blob+text group's upward translate
-  const blobRef = useRef(null); // handles the blob's grow/rotate scale
-  const blobImgRef = useRef(null); // handles the blob image's opacity fade
+  const blobLayerRef = useRef(null);
+  const blobRef = useRef(null);
+  const blobImgRef = useRef(null);
   const textRefs = useRef([]);
-  const galleryRowRef = useRef(null); // handles the gallery row's visibility (hidden until RISE_START)
-  const sideRefs = useRef([]); // [sugar, gloves, petri, portrait, roots] — all 5 move identically now
+  const leafTopRef = useRef(null);
+  const leafBottomRef = useRef(null);
 
   const targetProgress = useRef(0);
   const currentProgress = useRef(0);
   const rafId = useRef(null);
 
-  // Measured (not hardcoded) exit distances — how far the gallery row / blob
-  // actually need to travel to fully clear the top of the viewport. Fixed
-  // pixel values don't scale across viewport heights or with taller images
-  // (e.g. the portrait now moving like the rest), so these are recomputed
-  // from real layout on mount + resize instead of guessed.
-  const exitDistanceRef = useRef(EXIT_DISTANCE);
-  const blobExitDistanceRef = useRef(BLOB_EXIT_DISTANCE);
-
   useEffect(() => {
     // Mobile gets a plain static layout (see the mobile-only markup below) —
     // skip all the scroll-driven animation work entirely there.
     if (!window.matchMedia("(min-width: 768px)").matches) return;
-
-    const measureDistances = () => {
-      const viewportH = window.innerHeight;
-      const BUFFER = 60; // a little extra so it's fully gone, not just touching 0
-
-      // Gallery row: offsetTop/offsetHeight are layout values, unaffected by
-      // the translateY transform we apply, so this stays accurate regardless
-      // of current scroll position. Moving the row up by (its natural top +
-      // its own height) guarantees its bottom edge clears y = 0.
-      if (galleryRowRef.current) {
-        const rowTop = galleryRowRef.current.offsetTop;
-        const rowHeight = galleryRowRef.current.offsetHeight;
-        exitDistanceRef.current = rowTop + rowHeight + BUFFER;
-      }
-
-      // Blob: centered in the viewport, so it needs to travel from its
-      // vertical center up past the top by half the viewport plus half its
-      // own max size.
-      blobExitDistanceRef.current = viewportH / 2 + MAX_SIZE / 2 + BUFFER;
-    };
 
     const computeTarget = () => {
       const el = wrapperRef.current;
@@ -175,6 +103,14 @@ export default function OurVisionGallery() {
         blobRef.current.style.transform = `scale(${scale}) rotate(${rotation}deg)`;
       }
 
+      // --- Leaves: gentle drift while the section is pinned ---
+      if (leafTopRef.current) {
+        leafTopRef.current.style.transform = `translateY(${progress * LEAF_TOP_DRIFT}px)`;
+      }
+      if (leafBottomRef.current) {
+        leafBottomRef.current.style.transform = `translateY(${-progress * LEAF_BOTTOM_DRIFT}px)`;
+      }
+
       // --- Text stages, mapped against blob's own sub-progress ---
       STAGES.forEach((stage, i) => {
         const nextThreshold = STAGES[i + 1]?.threshold ?? 1;
@@ -186,65 +122,13 @@ export default function OurVisionGallery() {
 
         let opacity;
         if (i === STAGES.length - 1) {
-          // Last stage has no "next" threshold to fade against — instead it
-          // fades out against real scroll progress once the blob is done
-          // growing, so it doesn't stay stuck on screen forever.
-          const lateFadeOut = clamp01(
-            (TEXT_EXIT_END - progress) / (TEXT_EXIT_END - TEXT_EXIT_START)
-          );
-          opacity = Math.min(fadeIn, lateFadeOut);
+          opacity = fadeIn;
         } else {
           opacity = Math.min(fadeIn, fadeOut);
         }
 
         const node = textRefs.current[i];
         if (node) node.style.opacity = opacity;
-      });
-
-      const riseT = clamp01(
-        (progress - RISE_START) / (RISE_END - RISE_START)
-      );
-      const easedRiseT = easeOutCubic(riseT);
-      const riseY = lerp(RISE_DISTANCE, 0, easedRiseT);
-
-      const exitT = clamp01(
-        (progress - SIDE_EXIT_START) / (SIDE_EXIT_END - SIDE_EXIT_START)
-      );
-      const easedExitT = easeInCubic(exitT);
-      const exitY = lerp(0, -exitDistanceRef.current, easedExitT);
-
-      // --- Blob + text group: rides the same up-then-exit motion, at its
-      // own distances, so it visually travels together with the gallery
-      // rather than fading away. BLOB_EXTRA_GAP adds a little extra lift on
-      // top of that, eased in with the same easedRiseT, so the gap only
-      // opens up as the blob rises — never at rest/entry. ---
-      const blobRiseY = lerp(0, -BLOB_RISE_DISTANCE, easedRiseT);
-      const blobExitY = lerp(0, -blobExitDistanceRef.current, easedExitT);
-      const blobExtraGapY = lerp(0, -BLOB_EXTRA_GAP, easedRiseT);
-      if (blobLayerRef.current) {
-        blobLayerRef.current.style.transform = `translateY(${
-          blobRiseY + blobExitY + blobExtraGapY
-        }px)`;
-      }
-
-      // --- Blob image: stays fully opaque while growing, then fades to a
-      // little transparent from BLOB_GROW_END through the rest of scroll. ---
-      const fadeT = clamp01((progress - BLOB_GROW_END) / (1 - BLOB_GROW_END));
-      if (blobImgRef.current) {
-        blobImgRef.current.style.opacity = lerp(1, BLOB_MIN_OPACITY, fadeT);
-      }
-
-      if (galleryRowRef.current) {
-        galleryRowRef.current.style.opacity = riseT;
-        galleryRowRef.current.style.visibility = riseT > 0 ? "visible" : "hidden";
-      }
-
-      // --- Gallery images (including the portrait): all 5 rise the same
-      // way, then all exit upward + fade together. Nothing locks in place. ---
-      sideRefs.current.forEach((node) => {
-        if (!node) return;
-        node.style.transform = `translateY(${riseY + exitY}px)`;
-        node.style.opacity = 1 - easedExitT;
       });
     };
 
@@ -261,12 +145,8 @@ export default function OurVisionGallery() {
     };
 
     const onScroll = () => computeTarget();
-    const onResize = () => {
-      measureDistances();
-      computeTarget();
-    };
+    const onResize = () => computeTarget();
 
-    measureDistances();
     computeTarget();
     currentProgress.current = targetProgress.current;
     applyToDom(currentProgress.current);
@@ -306,63 +186,59 @@ export default function OurVisionGallery() {
       </div>
     </section>
 
-    {/* Desktop — existing scroll-driven animated version, untouched */}
-    <section ref={wrapperRef} className="relative hidden h-[450vh] w-full bg-[#FCFBF8] md:block">
-      <div className="sticky top-0 h-screen w-full overflow-hidden">
-
-        <div
-          ref={galleryRowRef}
-          className="absolute inset-x-0 bottom-[4%] z-0 flex items-start justify-center gap-4 px-6 md:gap-6 "
-          style={{ opacity: 0, visibility: "hidden" }}
-        >
-          <img
-            ref={(node) => (sideRefs.current[0] = node)}
-            src={sugarImg}
-            alt=""
-            className="mt-8 h-[220px] w-[200px] flex-shrink-0 rounded-2xl object-cover will-change-transform md:h-[260px] md:w-[230px]"
-          />
-          <img
-            ref={(node) => (sideRefs.current[1] = node)}
-            src={glovesImg}
-            alt=""
-            className=" h-[300px] w-[220px] flex-shrink-0 rounded-2xl object-left object-cover will-change-transform md:h-[380px] md:w-[260px]"
-          />
-          <img
-            ref={(node) => (sideRefs.current[2] = node)}
-            src={petriImg}
-            alt=""
-            className="mt-10 h-[200px] w-[200px] flex-shrink-0 rounded-2xl object-cover will-change-transform md:h-[240px] md:w-[240px]"
-          />
-          <img
-            ref={(node) => (sideRefs.current[3] = node)}
-            src={portraitImg}
-            alt=""
-            className="h-[400px] w-[320px] flex-shrink-0 rounded-2xl object-cover will-change-transform md:h-[560px] md:w-[500px] 2xl:h-[780px] 2xl:w-[680px]"
-          />
-          <img
-            ref={(node) => (sideRefs.current[4] = node)}
-            src={rootsImg}
-            alt=""
-            className="mt-10 h-[220px] w-[200px] flex-shrink-0 rounded-2xl object-cover will-change-transform md:h-[260px] md:w-[230px]"
-          />
-        </div>
+    {/* Desktop — scroll-driven blob grow animation, shorter section */}
+    <section ref={wrapperRef} className="relative hidden h-[150vh] w-full bg-[#FCFBF8] md:block ">
+      <div className="sticky top-0 h-screen w-full overflow-hidden ">
 
         <div
           ref={blobLayerRef}
           className="absolute inset-0 z-10 flex items-center justify-center will-change-transform"
         >
+          {/* Ambient leaf background — spans the whole section on a
+              diagonal (top-left -> bottom-right) rather than sitting as
+              two corner accents, so it reads as full-section art. */}
+          <img
+            ref={leafTopRef}
+            src={leafImg}
+            alt=""
+            draggable="false"
+            className="pointer-events-none select-none absolute -top-16 -left-16 sm:-top-20 sm:-left-20 md:-top-24 md:-left-24 w-[70vw] sm:w-[62vw] md:w-[56vw] opacity-80 will-change-transform"
+          />
+
+          <img
+            ref={leafBottomRef}
+            src={leafImg}
+            alt=""
+            draggable="false"
+            className="pointer-events-none select-none absolute -bottom-16 -right-16 sm:-bottom-20 sm:-right-20 md:-bottom-24 md:-right-24 w-[70vw] sm:w-[62vw] md:w-[56vw] opacity-80 will-change-transform rotate-180"
+          />
+
+          <div
+            className="pointer-events-none absolute inset-x-0 top-0 h-24 sm:h-32 md:h-40 z-[5]"
+            style={{
+              background: 'linear-gradient(to top, rgba(252,251,248,0) 0%, #FCFBF8 100%)',
+            }}
+          />
+          <div
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-24 sm:h-32 md:h-52 z-[5]"
+            style={{
+              background: 'linear-gradient(to bottom, rgba(252,251,248,0) 0%, #FCFBF8 100%)',
+            }}
+          />
+
           <div
             className="relative flex items-center justify-center"
             style={{
               width: `${MAX_SIZE}px`,
               height: `${MAX_SIZE}px`,
-              maxWidth: "90vw",
-              maxHeight: "90vw",
+              maxWidth: "100vw",
+              maxHeight: "100vh",
             }}
           >
+            
             <div
               ref={blobRef}
-              className="absolute inset-0 will-change-transform "
+              className="absolute inset-0 will-change-transform z-10 "
               style={{ transformOrigin: "center center" }}
             >
               <img
@@ -370,10 +246,12 @@ export default function OurVisionGallery() {
                 src={blobImage}
                 alt=""
                 aria-hidden="true"
-                className="h-full w-full select-none object-contain pointer-events-none"
+                className="h-full w-full select-none object-contain pointer-events-none "
                 style={{ opacity: 1 }}
               />
+
             </div>
+            
 
             <div className="relative z-10 flex h-full w-full items-center justify-center px-10">
               {STAGES.map((stage, i) => (
@@ -388,6 +266,7 @@ export default function OurVisionGallery() {
               ))}
             </div>
           </div>
+          
         </div>
       </div>
     </section>

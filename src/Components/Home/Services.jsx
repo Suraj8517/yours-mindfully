@@ -69,7 +69,7 @@ const VALUES = [
   },
   {
     format: "Therapy Program",
-    title: "Personal Growth & Healing Sessions",
+    title: "Personal Growth & Healing",
     subtitle: "Heal the patterns, not just the symptoms.",
     body:
       "Our structured therapy sessions are designed to help you understand emotional patterns, regulate emotions, strengthen resilience, and create healthier ways of responding to life's challenges.",
@@ -249,7 +249,7 @@ const clamp = (v, a, b) => Math.min(Math.max(v, a), b);
 function Panel({ accent, image, Icon, title }) {
   return (
     <div
-      className="relative aspect-[16/9] w-full shrink-0 overflow-hidden rounded-2xl sm:aspect-auto sm:h-full sm:w-[46%] sm:self-stretch sm:rounded-[3.5rem]"
+      className="relative aspect-[16/9] w-full shrink-0 overflow-hidden rounded-2xl sm:aspect-auto sm:h-full sm:w-[42%] 2xl:w-[40%] sm:self-stretch sm:rounded-[3.5rem] 2xl:rounded-[4rem]"
     >
       <img
         src={image}
@@ -272,16 +272,17 @@ function Panel({ accent, image, Icon, title }) {
             "linear-gradient(0deg, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0) 45%)",
         }}
       />
-      <div className="absolute inset-0 flex items-center justify-center sm:items-start sm:justify-start sm:p-6">
-  <div className="flex items-center gap-3 rounded-full bg-black/40 backdrop-blur-md px-4 py-3">
+      <div className="absolute inset-0 flex items-center justify-center sm:items-start sm:justify-start sm:p-6 2xl:p-9">
+  <div className="flex items-center gap-3 rounded-full bg-black/40 backdrop-blur-md px-4 py-3 2xl:gap-4 2xl:px-4 2xl:py-3">
     <div
-      className="flex h-12 w-12 items-center justify-center rounded-full bg-white sm:h-11 sm:w-11 2xl:h-12 2xl:w-12"
+      className="flex h-12 w-12 items-center justify-center rounded-full bg-white sm:h-11 sm:w-11 2xl:h-12 2xl:w-14"
     >
-      <Icon size={19} strokeWidth={1.6} color={accent} />
+      <Icon size={19} strokeWidth={1.6} color={accent} className="2xl:hidden block" />
+      <Icon size={24} strokeWidth={1.6} color={accent} className="hidden 2xl:block" />
     </div>
 
     <h2
-      className="text-xl font-extrabold text-white whitespace-nowrap"
+      className="text-xl font-extrabold text-white whitespace-nowrap 2xl:text-[1.25rem]"
     >
       {title}
     </h2>
@@ -293,7 +294,7 @@ function Panel({ accent, image, Icon, title }) {
 
 function TagChip({ label }) {
   return (
-    <span className="rounded-full border bg-green-200 border-black/[0.08] px-3 py-[0.3rem] text-[0.72rem] font-medium leading-none text-green-900 sm:text-[0.74rem]">
+    <span className="rounded-full border bg-green-200 border-green-800/8 px-3 py-[0.3rem] text-[0.72rem] 2xl:px-5 2xl:py-[0.5rem] 2xl:text-[1rem] font-light leading-none text-green-900 sm:text-[0.74rem]">
       {label}
     </span>
   );
@@ -301,14 +302,16 @@ function TagChip({ label }) {
 
 function GainRow({ text, accent }) {
   return (
-    <li className="flex items-start gap-2.5">
+    <li className="flex items-start gap-2.5 2xl:gap-3">
       <span
-        className="mt-[0.2rem] flex h-[1.05rem] w-[1.05rem] shrink-0 items-center justify-center rounded-full"
+        className="mt-[0.2rem]  flex h-[1.05rem] 2xl:h-6 w-[1.05rem] 2xl:w-6  shrink-0 items-center justify-center rounded-full"
        
       >
-        <HeartIcon size={10} strokeWidth={4} color="#E46F83"  />
+        <HeartIcon size={10} strokeWidth={4} color="#E46F83" className="2xl:hidden block" />
+                <HeartIcon size={16} strokeWidth={4} color="#E46F83" className="hidden 2xl:block" />
+
       </span>
-      <span className="text-[0.83rem] leading-snug text-[#3C3E3A] sm:text-[0.86rem]">
+      <span className="text-[0.83rem] 2xl:text-[1.05rem] leading-snug text-[#3C3E3A] sm:text-[0.86rem]">
         {text}
       </span>
     </li>
@@ -317,14 +320,14 @@ function GainRow({ text, accent }) {
 
 function SubServiceRow({ name, desc, accent }) {
   return (
-    <li className="flex flex-col gap-0.5 border-l border-black/20 pl-2">
+    <li className="flex flex-col gap-0.5 2xl:gap-1 border-l border-black/20 pl-2 2xl:pl-4">
       <span
-        className="text-[0.78rem] font-bold leading-snug sm:text-[0.8rem]"
+        className="text-[0.78rem] 2xl:text-[1rem]  font-bold leading-snug sm:text-[0.8rem]"
         style={{ color: accent }}
       >
         {name}
       </span>
-      <span className="text-[0.8rem] leading-snug text-[#3C3E3A] sm:text-[0.63rem]">
+      <span className="text-[0.8rem] 2xl:text-[0.85rem]  leading-snug text-[#3C3E3A] sm:text-[0.63rem]">
         {desc}
       </span>
     </li>
@@ -441,12 +444,12 @@ export default function StackingValues() {
           stays put on screen while the cards scroll and stack beneath it */}
       <div ref={containerRef} className="relative" style={{ height: `${TOTAL_SCROLL_VH + 100}vh` }}>
         <div className="sticky top-0 flex h-screen flex-col overflow-hidden">
-          <div className="mx-auto w-full max-w-5xl shrink-0 px-6 pb-4 pt-8 sm:pb-2 sm:pt-3 2xl:max-w-6xl 2xl:pt-16">
-            <p className="mb-1 text-[0.72rem] font-medium uppercase tracking-[0.16em] text-[#9A9C93] sm:text-[0.76rem]">
+          <div className="mx-auto w-full max-w-5xl shrink-0 px-6 pb-4 pt-8 sm:pb-2 sm:pt-3 2xl:max-w-6xl 2xl:pt-16 2xl:pb-5">
+            <p className="mb-1 text-[0.72rem] font-medium uppercase tracking-[0.16em] text-[#9A9C93] sm:text-[0.76rem] 2xl:mb-3 2xl:text-[0.88rem] 2xl:tracking-[0.2em]">
               Emotional wellness, tailored to you
             </p>
             <h2
-              className="max-w-3xl text-[1.9rem] leading-[1.06] tracking-[-0.02em] text-[#E46F83] sm:text-[2rem] 2xl:text-[3.5rem]"
+              className="max-w-3xl text-[1.9rem] leading-[1.06] tracking-[-0.02em] text-[#E46F83] sm:text-[2rem] 2xl:max-w-4xl 2xl:text-[3rem]"
               style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 800 }}
             >
               Choose the support that's right for you
@@ -461,7 +464,7 @@ export default function StackingValues() {
               <div
                 key={value.title}
                 ref={(el) => (cardRefs.current[i] = el)}
-                className="absolute left-1/2 top-1/2 flex w-[92%] max-w-5xl flex-col gap-5 rounded-[1.75rem] border border-black/[0.06] bg-white p-5 shadow-[inset_0_0_0_2px_rgba(155,177,120,0.18),inset_0_4px_24px_8px_rgba(155,177,120,0.22)] sm:h-[29rem] sm:w-[86%] sm:flex-row sm:items-stretch sm:gap-9 sm:rounded-[5rem] sm:p-6 2xl:h-[31rem] 2xl:max-w-6xl 2xl:gap-11 2xl:rounded-[2.25rem] 2xl:p-7"
+                className="absolute left-1/2 top-1/2 flex w-[92%] max-w-5xl flex-col gap-5 rounded-[1.75rem] border border-black/[0.06] bg-white p-5 shadow-[inset_0_0_0_2px_rgba(155,177,120,0.18),inset_0_4px_24px_8px_rgba(155,177,120,0.22)] h-[45rem] sm:h-[29rem] sm:w-[86%] sm:flex-row sm:items-stretch sm:gap-9 sm:rounded-[5rem] sm:p-6 2xl:h-[46rem] 2xl:max-w-6xl 2xl:gap-14 2xl:rounded-[6rem] 2xl:p-11"
                 style={{
                   zIndex: i,
                   willChange: "transform, opacity",
@@ -469,26 +472,26 @@ export default function StackingValues() {
               >
                 <Panel accent={value.accent} image={value.image} Icon={Icon} title={value.title}/>
 
-                <div className="flex min-h-0 flex-1 flex-col sm:w-[64%]  ">
+                <div className="flex min-h-0 flex-1 flex-col sm:w-[64%] 2xl:mt-5 ">
                   <div className="shrink-0 ">
                     <p
-                      className="text-[0.72rem] font-semibold italic leading-snug"
+                      className="text-[0.72rem] font-semibold italic leading-snug 2xl:text-[1.2rem]"
                       style={{ color: value.accent }}
                     >
                       {value.subtitle}
                     </p>
-                    <p className="max-w-md text-[0.85rem] leading-relaxed text-[#68695F]/90 sm:text-[0.9rem] mt-2">
+                    <p className="max-w-md text-[0.85rem] 2xl:text-[1.08rem] leading-relaxed text-[#68695F]/90 sm:text-[0.9rem] mt-2 2xl:max-w-lg 2xl:mt-3">
                       {value.body}
                     </p>
                   </div>
 
-                  <div className="no-scrollbar mt-2 flex flex-1 flex-col justify-[safe_center] overflow-y-auto pr-1">
+                  <div className="no-scrollbar mt-2 flex flex-1 flex-col justify-[safe_center] overflow-y-auto pr-1 2xl:mt-4 2xl:pr-2">
                     {value.subServices && (
-                      <div className="mb-3">
-                        <p className="mb-2 text-[0.68rem] font-semibold uppercase tracking-[0.1em] text-[#A0A196]">
+                      <div className="mb-3  2xl:mb-4">
+                        <p className="mb-2  2xl:mb-4 text-[0.68rem] font-semibold uppercase tracking-[0.1em] text-[#A0A196] 2xl:text-[0.85rem] 2xl:tracking-[0.14em]">
                           {value.tagsLabel}
                         </p>
-                      <ul className="grid grid-cols-3 gap-1.5">
+                      <ul className="sm:grid sm:grid-cols-3 gap-1.5 2xl:gap-4">
   {value.subServices.map((s) => (
     <SubServiceRow
       key={s.name}
@@ -502,11 +505,11 @@ export default function StackingValues() {
                     )}
 
                     {!value.subServices && value.tagsLabel && (
-                      <div className="mb-2">
-                        <p className="mb-2 text-[0.68rem] font-semibold uppercase tracking-[0.1em] text-[#A0A196]">
+                      <div className="mb-2 2xl:mb-6">
+                        <p className="mb-2 2xl:mb-4 text-[0.68rem] 2xl:text-[0.85rem] font-semibold uppercase tracking-[0.1em] text-[#A0A196] 2xl:tracking-[0.14em]">
                           {value.tagsLabel}
                         </p>
-                        <div className="flex flex-wrap gap-1.5">
+                        <div className="flex flex-wrap gap-1.5 2xl:gap-2.5">
                           {value.tags.map((tag) => (
                             <TagChip key={tag} label={tag} />
                           ))}
@@ -515,10 +518,10 @@ export default function StackingValues() {
                     )}
 
                     <div>
-                      <p className="mb-2 text-[0.68rem] font-semibold uppercase tracking-[0.1em] text-[#A0A196]">
+                      <p className="mb-2 2xl:mb-4 text-[0.68rem] 2xl:text-[0.85rem] font-semibold uppercase tracking-[0.1em] text-[#A0A196] 2xl:tracking-[0.14em]">
                         {value.gainsLabel}
                       </p>
-                      <ul className="grid grid-cols-1 gap-1.5 sm:grid-cols-2 sm:gap-x-4 sm:gap-y-1">
+                      <ul className="grid grid-cols-2 gap-1.5 sm:grid-cols-2 sm:gap-x-4 sm:gap-y-1 2xl:gap-x-7 2xl:gap-y-3">
                         {value.gains.map((gain) => (
                           <GainRow key={gain} text={gain} accent={value.accent} />
                         ))}
@@ -526,28 +529,38 @@ export default function StackingValues() {
                     </div>
                   </div>
 
-                  <div className="mt-2 flex shrink-0 flex-wrap items-center gap-3 border-t border-black/[0.06] pt-4">
+                  <div className="mt-2 flex shrink-0 flex-wrap items-center gap-3 border-t border-black/[0.06] pt-4 2xl:mt-4 2xl:gap-4 2xl:pt-7">
                     <button
                       type="button"
-                      className="group inline-flex items-center gap-1.5 rounded-full bg-[#161715] px-5 py-2.5 text-[0.82rem] font-medium text-white transition-opacity duration-200 hover:opacity-85 active:opacity-70"
+                      className="group inline-flex items-center gap-1.5 rounded-full bg-[#161715] px-5 py-2.5 text-[0.82rem] font-medium text-white transition-opacity duration-200 hover:opacity-85 active:opacity-70 2xl:gap-2 2xl:px-7 2xl:py-3.5 2xl:text-[1rem]"
                     >
                       {value.cta}
                       <ArrowRight
                         size={15}
                         strokeWidth={2}
-                        className="transition-transform duration-200 group-hover:translate-x-0.5"
+                        className="transition-transform duration-200 group-hover:translate-x-0.5 2xl:hidden block"
+                      />
+                      <ArrowRight
+                        size={19}
+                        strokeWidth={2}
+                        className="hidden transition-transform duration-200 group-hover:translate-x-0.5 2xl:block"
                       />
                     </button>
                     {value.cta2 && (
                       <button
                         type="button"
-                        className="group inline-flex items-center gap-1.5 rounded-full border border-black/[0.12] bg-white px-5 py-2.5 text-[0.82rem] font-medium text-[#161715] transition-opacity duration-200 hover:opacity-70 active:opacity-55"
+                        className="group inline-flex items-center gap-1.5 rounded-full border border-black/[0.12] bg-white px-5 py-2.5 text-[0.82rem] font-medium text-[#161715] transition-opacity duration-200 hover:opacity-70 active:opacity-55 2xl:gap-2 2xl:px-7 2xl:py-3.5 2xl:text-[1rem]"
                       >
                         {value.cta2}
                         <ArrowRight
                           size={15}
                           strokeWidth={2}
-                          className="transition-transform duration-200 group-hover:translate-x-0.5"
+                          className="transition-transform duration-200 group-hover:translate-x-0.5 2xl:hidden block"
+                        />
+                        <ArrowRight
+                          size={19}
+                          strokeWidth={2}
+                          className="hidden transition-transform duration-200 group-hover:translate-x-0.5 2xl:block"
                         />
                       </button>
                     )}

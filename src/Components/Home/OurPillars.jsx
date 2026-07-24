@@ -17,8 +17,14 @@ import img4 from "../../assets/pillars/well.jpg"
  *    section unlocks and the page resumes normal scrolling past it.
  *
  * Implementation notes:
- * - The outer wrapper is tall (slides.length * 100vh) so there is enough
- *   scroll distance to drive the internal animation.
+ * - The outer wrapper's height is set to exactly
+ *   `100vh + (slides.length - 1) * STEP_VH`. The extra part beyond the
+ *   first 100vh is the ONLY scroll distance the animation gets — so the
+ *   scroll distance you travel while pinned is identical to the distance
+ *   the stacked panels visually travel. That means progress hits 1 (last
+ *   card fully in view) at exactly the same scroll position where the
+ *   wrapper runs out of height and `sticky` naturally releases — no dead
+ *   scroll space before or after.
  * - An inner element is `sticky top-0 h-screen` — this is what pins.
  * - Progress (0 -> 1) is derived from how far we've scrolled through the
  *   wrapper, and used to translateY the stacked right-column panels.
@@ -27,7 +33,7 @@ import img4 from "../../assets/pillars/well.jpg"
 // Tune these to control card sizing/spacing precisely, per breakpoint.
 // Tailwind's `2xl` breakpoint is 1536px.
 const CARD_HEIGHT_VH_XL = 72; // card height below 1536px (xl and smaller)
-const CARD_HEIGHT_VH_2XL = 58; // card height at 1536px and above
+const CARD_HEIGHT_VH_2XL = 68; // card height at 1536px and above
 const CARD_GAP_VH = 4; // vertical gap between stacked cards, in vh
 const TWO_XL_BREAKPOINT = 1536;
 
@@ -87,6 +93,12 @@ export default function OurMaterials() {
 
   const STEP_VH = cardHeightVh;
 
+  // Total scroll room the wrapper occupies. The first 100vh is "used up"
+  // just getting the section pinned (nothing animates during that part —
+  // it's the natural scroll-in). Everything after that is the distance the
+  // panels travel, so this is exactly (slides.length - 1) * STEP_VH.
+  const wrapperHeightVh = 150 + (slides.length - 1) * STEP_VH;
+
   useEffect(() => {
     function handleScroll() {
       const wrapper = wrapperRef.current;
@@ -124,7 +136,7 @@ export default function OurMaterials() {
     <section
       ref={wrapperRef}
       className="relative"
-      style={{ height: `${slides.length * 100}vh` }}
+      style={{ height: `${wrapperHeightVh}vh` }}
     >
       <h2 className="text-center pb-12 text-5xl">WHY CHOOSE MINDFULLY YOU </h2>
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#FCFBF8]">
