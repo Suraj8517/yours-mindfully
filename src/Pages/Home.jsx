@@ -7,6 +7,8 @@ import AboutUs from '../Components/Home/AboutUs'
 import OurVision from '../Components/Home/OurVision'
 import FaqSection from '../Components/Home/FAQSection'
 import OurPillars from '../Components/Home/OurPillars'
+import OurMission from '../Components/Home/ourMission'
+import Services from '../Components/Home/Services'
 
 export default function Home
 () {
@@ -16,11 +18,13 @@ export default function Home
          <InfiniteImageStrip/>
          <TextSection/>
          <DetailedSection/> 
+          <AboutUs/>  
          <OurVision/>  
-        <div className="relative z-30 sm:-translate-y-[40vh]">
-   <AboutUs/>  
+        <div className="relative z-30 sm:-translate-y-[60vh] ">
+  <OurMission/>
   </div>
   <OurPillars/>
+  <Services/>
     <FaqSection />
     </div>
   )

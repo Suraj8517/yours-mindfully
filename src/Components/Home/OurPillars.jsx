@@ -126,17 +126,17 @@ export default function OurMaterials() {
       className="relative"
       style={{ height: `${slides.length * 100}vh` }}
     >
-      
-      <div className="sticky top-0 h-screen w-full overflow-hidden bg-white">
+      <h2 className="text-center pb-12 text-5xl">WHY CHOOSE MINDFULLY YOU </h2>
+      <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#FCFBF8]">
         <div className="mx-auto grid h-full w-full max-w-[1600px] grid-cols-1 gap-8 px-6 md:grid-cols-[220px_1fr] md:gap-12 md:px-12">
           {/* LEFT: always vertically centered on screen, independent of right column */}
-          <div className="flex h-full flex-col justify-center">
-            <h2 className="font-serif text-2xl leading-tight text-stone-900 sm:text-5xl">
+          <div className="hidden sm:flex h-full flex-col justify-center">
+            <h2 className="font-serif text-4xl leading-tight text-stone-900 sm:text-5xl">
               Our Four
               <br />
                Pillars
             </h2>
-            <div className="mt-4 h-px w-44 bg-[#E46F83]" />
+            <div className="hidden sm:block mt-4 h-px w-44 bg-[#E46F83]" />
 
             {/* progress dots */}
             <div className="mt-8 flex gap-2">
@@ -150,7 +150,25 @@ export default function OurMaterials() {
               ))}
             </div>
           </div>
+   <div className="pt-4 sm:hidden flex h-full flex-col justify-center">
+            <h2 className="font-serif text-4xl leading-tight text-stone-900 sm:text-5xl">
+              Our Four
+               Pillars
+            </h2>
+            <div className="hidden sm:block mt-4 h-px w-44 bg-[#E46F83]" />
 
+            {/* progress dots */}
+            <div className="mt-8 flex gap-2">
+              {slides.map((s, i) => (
+                <span
+                  key={s.id}
+                  className={`h-1.5 w-6 rounded-full transition-colors duration-300 ${
+                    i === activeIndex ? "bg-[#E46F83]" : "bg-stone-200"
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
           {/* RIGHT: scrolling stacked panels — fixed-height cards, next card peeks at the bottom */}
           <div className="relative h-full min-h-0 w-full overflow-hidden">
             <div
@@ -169,11 +187,11 @@ export default function OurMaterials() {
                     paddingBottom: `${CARD_GAP_VH}vh`,
                   }}
                 >
-                  <div className="relative h-full w-full">
+                  <div className="relative h-full w-full ">
                     {/* soft mint glow bleeding out from behind the card */}
                     <div className="pointer-events-none absolute -inset-6 -z-10 rounded-[48px]  opacity-80 blur-2xl" />
 
-                    <div className="grid h-full w-full grid-cols-1 bg-white overflow-hidden rounded-[62px]  shadow-[inset_0_0_0_2px_rgba(155,177,120,0.18),inset_0_4px_24px_8px_rgba(155,177,120,0.22)] sm:grid-cols-[1fr_1.05fr]">
+                    <div className="grid h-full w-full grid-cols-1 bg-[#FCFBF8] overflow-hidden rounded-[112px]  shadow-[inset_0_0_0_2px_rgba(155,177,120,0.18),inset_0_4px_24px_8px_rgba(155,177,120,0.22)] sm:grid-cols-[1fr_1.05fr]">
                       {/* Text block */}
                       <div className="flex flex-col justify-center px-6 py-8 sm:px-10 lg:px-12">
                         <h3 className="font-serif text-2xl leading-tight text-[#3F4A33] sm:text-3xl lg:text-4xl">
@@ -188,7 +206,7 @@ export default function OurMaterials() {
                       <img
   src={slide.image}
   alt={slide.imgAlt}
-  className={`w-full h-full object-cover rounded-[64px] ${slide.imgClass}`}
+  className={`w-full h-full object-cover rounded-[112px] ${slide.imgClass} border border-green-200`}
 />
                     </div>
                   </div>

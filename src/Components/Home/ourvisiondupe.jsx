@@ -11,7 +11,7 @@ const STAGES = [
   {
     threshold: 0,
     text: (
-      <h1 className="text-4xl text-[#657C4F]" style={{fontWeight:900}}>
+      <h1 className="text-4xl text-green-900" style={{fontWeight:900}}>
         Our Vision
       </h1>
     ),
@@ -47,23 +47,35 @@ const STAGES = [
 // window (see TEXT_EXIT_START / TEXT_EXIT_END below), so it doesn't stay
 // pinned at full opacity once the blob starts moving.
 //
-// Phase 3 [SIDE_EXIT_START -> SIDE_EXIT_END]: all 5 gallery images
-// (including the portrait — nothing locks in place anymore) keep rising
-// further and exit upward off-screen together. The blob keeps moving
-// upward through this phase too, until it's carried off the top of the
-// sticky viewport. It also fades to a little transparent, starting once
-// the blob has finished growing (BLOB_GROW_END), controlled by
-// BLOB_MIN_OPACITY.
+// Phase 3 [SIDE_EXIT_START -> SIDE_EXIT_END]: the portrait image locks in
+// place (holds its resting spot) while the 4 side images keep rising
+// further and exit upward off-screen. The blob keeps moving upward through
+// this phase too, until it's carried off the top of the sticky viewport.
+// It also fades to a little transparent, starting once the blob has
+// finished growing (BLOB_GROW_END), controlled by BLOB_MIN_OPACITY.
+//
+// Phase 4 [CONTENT_START -> CONTENT_END]: with the side images gone, some
+// copy fades in on the left while the portrait stays locked in its resting
+// spot.
+//
+// Phase 5 [PORTRAIT_EXIT_START -> PORTRAIT_EXIT_END]: the portrait (and the
+// left-side content) finally un-lock and rise off-screen together, exactly
+// as the section's scroll room runs out — this is what releases the
+// sticky pin, so nothing is "stuck" forever.
 
 const BLOB_GROW_END = 0.2; // blob finishes growing + text finishes cycling by here
 
 const RISE_START = BLOB_GROW_END; // 0.2 — blob + gallery start moving together right here
 const RISE_END = 0.38; // gallery fully settled into its row position
 
-const SIDE_EXIT_START = 0.42; // all 5 images (and the blob) rise further and exit
-const SIDE_EXIT_END = 1; // exit now runs all the way to the end of scroll, so nothing
-// sits fully-exited-but-still-pinned for a stretch of dead scroll before the
-// sticky section releases — the last bit of exit motion finishes right as it does
+const SIDE_EXIT_START = 0.42; // the 4 side images (and the blob) rise further and exit
+const SIDE_EXIT_END = 0.6;
+
+const CONTENT_START = SIDE_EXIT_END; // 0.6 — left-side content starts fading in
+const CONTENT_END = 0.8; // left-side content fully visible, portrait still locked
+
+const PORTRAIT_EXIT_START = CONTENT_END; // 0.8 — portrait + left content finally release
+const PORTRAIT_EXIT_END = 1; // fully exited exactly as the section's scroll room ends
 
 // The last STAGES entry has no "next" threshold to fade out against (it
 // just fades in and stays), so we give it its own progress-based exit
@@ -78,7 +90,8 @@ const FADE_WINDOW = 0.12;
 const SMOOTHING = 0.08;
 
 const RISE_DISTANCE = 420; // how far below their resting spot the gallery images start
-const EXIT_DISTANCE = 900; // how far up the gallery images travel as they exit
+const EXIT_DISTANCE = 900; // how far up the side images travel as they exit
+const PORTRAIT_EXIT_DISTANCE = 900; // how far up the portrait travels once it finally releases
 
 const BLOB_RISE_DISTANCE = 300; // how far the blob moves up while the gallery rises into view
 const BLOB_EXIT_DISTANCE = 900; // how much further the blob continues up during the exit phase
@@ -88,6 +101,8 @@ const BLOB_EXTRA_GAP = 160; // additional lift, eased in together with the rise 
 // offset applied at every progress value, this is 0 at rest/entry
 // (progress 0), so it can never overlap the previous section — it only
 // grows in as the blob actually rises (same easedRiseT as BLOB_RISE_DISTANCE).
+
+const CONTENT_SLIDE_DISTANCE = 60; // small slide-in distance for the left content copy
 
 function lerp(a, b, t) {
   return a + (b - a) * t;
@@ -109,44 +124,18 @@ export default function OurVisionGallery() {
   const blobImgRef = useRef(null); // handles the blob image's opacity fade
   const textRefs = useRef([]);
   const galleryRowRef = useRef(null); // handles the gallery row's visibility (hidden until RISE_START)
-  const sideRefs = useRef([]); // [sugar, gloves, petri, portrait, roots] — all 5 move identically now
+  const portraitRef = useRef(null);
+  const sideRefs = useRef([]); // [sugar, gloves, petri, roots]
+  const leftContentRef = useRef(null); // the copy that appears on the left after side images exit
 
   const targetProgress = useRef(0);
   const currentProgress = useRef(0);
   const rafId = useRef(null);
 
-  // Measured (not hardcoded) exit distances — how far the gallery row / blob
-  // actually need to travel to fully clear the top of the viewport. Fixed
-  // pixel values don't scale across viewport heights or with taller images
-  // (e.g. the portrait now moving like the rest), so these are recomputed
-  // from real layout on mount + resize instead of guessed.
-  const exitDistanceRef = useRef(EXIT_DISTANCE);
-  const blobExitDistanceRef = useRef(BLOB_EXIT_DISTANCE);
-
   useEffect(() => {
     // Mobile gets a plain static layout (see the mobile-only markup below) —
     // skip all the scroll-driven animation work entirely there.
     if (!window.matchMedia("(min-width: 768px)").matches) return;
-
-    const measureDistances = () => {
-      const viewportH = window.innerHeight;
-      const BUFFER = 60; // a little extra so it's fully gone, not just touching 0
-
-      // Gallery row: offsetTop/offsetHeight are layout values, unaffected by
-      // the translateY transform we apply, so this stays accurate regardless
-      // of current scroll position. Moving the row up by (its natural top +
-      // its own height) guarantees its bottom edge clears y = 0.
-      if (galleryRowRef.current) {
-        const rowTop = galleryRowRef.current.offsetTop;
-        const rowHeight = galleryRowRef.current.offsetHeight;
-        exitDistanceRef.current = rowTop + rowHeight + BUFFER;
-      }
-
-      // Blob: centered in the viewport, so it needs to travel from its
-      // vertical center up past the top by half the viewport plus half its
-      // own max size.
-      blobExitDistanceRef.current = viewportH / 2 + MAX_SIZE / 2 + BUFFER;
-    };
 
     const computeTarget = () => {
       const el = wrapperRef.current;
@@ -211,7 +200,7 @@ export default function OurVisionGallery() {
         (progress - SIDE_EXIT_START) / (SIDE_EXIT_END - SIDE_EXIT_START)
       );
       const easedExitT = easeInCubic(exitT);
-      const exitY = lerp(0, -exitDistanceRef.current, easedExitT);
+      const exitY = lerp(0, -EXIT_DISTANCE, easedExitT);
 
       // --- Blob + text group: rides the same up-then-exit motion, at its
       // own distances, so it visually travels together with the gallery
@@ -219,7 +208,7 @@ export default function OurVisionGallery() {
       // top of that, eased in with the same easedRiseT, so the gap only
       // opens up as the blob rises — never at rest/entry. ---
       const blobRiseY = lerp(0, -BLOB_RISE_DISTANCE, easedRiseT);
-      const blobExitY = lerp(0, -blobExitDistanceRef.current, easedExitT);
+      const blobExitY = lerp(0, -BLOB_EXIT_DISTANCE, easedExitT);
       const blobExtraGapY = lerp(0, -BLOB_EXTRA_GAP, easedRiseT);
       if (blobLayerRef.current) {
         blobLayerRef.current.style.transform = `translateY(${
@@ -239,8 +228,39 @@ export default function OurVisionGallery() {
         galleryRowRef.current.style.visibility = riseT > 0 ? "visible" : "hidden";
       }
 
-      // --- Gallery images (including the portrait): all 5 rise the same
-      // way, then all exit upward + fade together. Nothing locks in place. ---
+      // --- Left-side content: fades (+ slides in) once the side images have
+      // exited, then exits together with the portrait at the very end. ---
+      const contentInT = clamp01(
+        (progress - CONTENT_START) / (CONTENT_END - CONTENT_START)
+      );
+      const easedContentInT = easeOutCubic(contentInT);
+
+      const portraitExitT = clamp01(
+        (progress - PORTRAIT_EXIT_START) / (PORTRAIT_EXIT_END - PORTRAIT_EXIT_START)
+      );
+      const easedPortraitExitT = easeInCubic(portraitExitT);
+      const portraitExitY = lerp(0, -PORTRAIT_EXIT_DISTANCE, easedPortraitExitT);
+
+      if (leftContentRef.current) {
+        const contentSlideY = lerp(CONTENT_SLIDE_DISTANCE, 0, easedContentInT);
+        leftContentRef.current.style.opacity =
+          easedContentInT * (1 - easedPortraitExitT);
+        leftContentRef.current.style.visibility =
+          contentInT > 0 ? "visible" : "hidden";
+        leftContentRef.current.style.transform = `translateY(${
+  contentSlideY + portraitExitY
+}px)`;
+      }
+
+      // Portrait: rises once, holds while the side images exit and the left
+      // content appears, then finally releases and exits upward too — it's
+      // never locked in place forever.
+      if (portraitRef.current) {
+        portraitRef.current.style.transform = `translateY(${riseY + portraitExitY}px)`;
+        portraitRef.current.style.opacity = 1 - easedPortraitExitT;
+      }
+
+      // Side images: rise the same way, then additionally exit upward + fade.
       sideRefs.current.forEach((node) => {
         if (!node) return;
         node.style.transform = `translateY(${riseY + exitY}px)`;
@@ -261,12 +281,8 @@ export default function OurVisionGallery() {
     };
 
     const onScroll = () => computeTarget();
-    const onResize = () => {
-      measureDistances();
-      computeTarget();
-    };
+    const onResize = () => computeTarget();
 
-    measureDistances();
     computeTarget();
     currentProgress.current = targetProgress.current;
     applyToDom(currentProgress.current);
@@ -303,6 +319,17 @@ export default function OurVisionGallery() {
           />
         
         </div>
+
+        <div className="mt-8 max-w-sm">
+          <h3 className="font-serif text-2xl leading-snug text-neutral-900">
+            Our Mission
+          </h3>
+          <p className="mt-3 text-base leading-relaxed text-neutral-700">
+            To empower people to understand themselves deeply, embrace their
+            emotions with compassion, and create healthier, more fulfilling
+            lives.
+          </p>
+        </div>
       </div>
     </section>
 
@@ -334,17 +361,36 @@ export default function OurVisionGallery() {
             className="mt-10 h-[200px] w-[200px] flex-shrink-0 rounded-2xl object-cover will-change-transform md:h-[240px] md:w-[240px]"
           />
           <img
-            ref={(node) => (sideRefs.current[3] = node)}
+            ref={portraitRef}
             src={portraitImg}
             alt=""
             className="h-[400px] w-[320px] flex-shrink-0 rounded-2xl object-cover will-change-transform md:h-[560px] md:w-[500px] 2xl:h-[780px] 2xl:w-[680px]"
           />
           <img
-            ref={(node) => (sideRefs.current[4] = node)}
+            ref={(node) => (sideRefs.current[3] = node)}
             src={rootsImg}
             alt=""
             className="mt-10 h-[220px] w-[200px] flex-shrink-0 rounded-2xl object-cover will-change-transform md:h-[260px] md:w-[230px]"
           />
+        </div>
+
+        {/* Left-side copy, revealed once the side images have exited and the
+            portrait has settled into its resting spot. */}
+        <div
+          ref={leftContentRef}
+          className="absolute inset-0  flex items-center"
+          style={{ opacity: 0, visibility: "hidden" }}
+        >
+          <div className="mx-auto  w-full max-w-4xl items-center">
+             <div className="w-1/2 pr-12">
+            <h3 className="font-serif text-3xl leading-snug text-neutral-900 md:text-5xl">
+              Our Mission
+            </h3>
+            <p className="mt-4 text-base leading-relaxed text-neutral-700 md:text-xl">
+              To empower people to understand themselves deeply, embrace their emotions with compassion, and create healthier, more fulfilling lives.
+            </p>
+            </div>
+          </div>
         </div>
 
         <div
