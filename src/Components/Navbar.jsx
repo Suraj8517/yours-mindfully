@@ -40,9 +40,9 @@ export default function Navbar() {
         <div className="hidden md:block">
           <a
             href="#contact"
-            className="inline-flex items-center rounded-full bg-white px-6 py-2.5 text-sm font-medium tracking-wide text-[#7C8471] transition-colors hover:bg-white/90 xl:px-7 xl:text-base"
+            className="inline-flex items-center rounded-full bg-white px-6 py-2.5 text-sm font-medium tracking-wide text-[#7C8471] transition-colors hover:bg-white/90 xl:px-7 xl:text-base hover:scale-105"
           >
-            Contact Us
+            Start Your Journey
           </a>
         </div>
 

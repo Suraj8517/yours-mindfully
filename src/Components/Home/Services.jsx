@@ -277,6 +277,7 @@ function Panel({ accent, image, Icon, title }) {
 
     <h2
       className="text-xl font-extrabold text-white whitespace-nowrap 2xl:text-[1.25rem]"
+      style={{ fontFamily: "'Fraunces', serif", fontWeight: 600, letterSpacing: "-0.01em" }}
     >
       {title}
     </h2>
@@ -288,7 +289,7 @@ function Panel({ accent, image, Icon, title }) {
 
 function TagChip({ label }) {
   return (
-    <span className="rounded-full border bg-green-200 border-green-800/8 px-3 py-[0.3rem] text-[0.72rem] 2xl:px-5 2xl:py-[0.5rem] 2xl:text-[1rem] font-light leading-none text-green-900 sm:text-[0.74rem]">
+    <span className="rounded-full border bg-[#d3f2b5] border-green-800/8 px-3 py-[0.3rem] text-[0.72rem] 2xl:px-5 2xl:py-[0.5rem] 2xl:text-[1rem] font-light leading-none text-[#657c4f] sm:text-[0.74rem]">
       {label}
     </span>
   );
@@ -317,7 +318,7 @@ function SubServiceRow({ name, desc, accent }) {
     <li className="flex flex-col gap-0.5 2xl:gap-1 border-l border-black/20 pl-2 2xl:pl-4">
       <span
         className="text-[0.78rem] 2xl:text-[1rem]  font-bold leading-snug sm:text-[0.8rem]"
-        style={{ color: accent }}
+        style={{ color: accent, fontFamily: "'Fraunces', serif" }}
       >
         {name}
       </span>
@@ -338,7 +339,7 @@ export default function StackingValues() {
       const link = document.createElement("link");
       link.rel = "stylesheet";
       link.href =
-        "https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&display=swap";
+        "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600&display=swap";
       document.head.appendChild(link);
       fontLoaded.current = true;
     }
@@ -443,8 +444,8 @@ export default function StackingValues() {
               Emotional wellness, tailored to you
             </p>
             <h2
-              className="max-w-3xl text-[1.9rem] leading-[1.06] tracking-[-0.02em] text-[#E46F83] sm:text-[2rem] 2xl:max-w-4xl 2xl:text-[3rem]"
-              style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 800 }}
+              className="max-w-3xl text-[1.9rem] leading-[1.06] tracking-[-0.015em] text-[#E46F83] sm:text-[2rem] 2xl:max-w-4xl 2xl:text-[3rem]"
+              style={{ fontFamily: "'Fraunces', serif", fontWeight: 600, fontOpticalSizing: "auto" }}
             >
               Choose the support that's right for you
             </h2>
@@ -469,8 +470,8 @@ export default function StackingValues() {
                 <div className="flex min-h-0 flex-1 flex-col sm:w-[64%] 2xl:mt-5 ">
                   <div className="shrink-0 ">
                     <p
-                      className="text-[0.72rem] font-semibold italic leading-snug 2xl:text-[1.2rem]"
-                      style={{ color: value.accent }}
+                      className="text-[0.8rem] leading-snug 2xl:text-[1.3rem]"
+                      style={{ color: value.accent, fontFamily: "'Fraunces', serif", fontStyle: "italic", fontWeight: 500 }}
                     >
                       {value.subtitle}
                     </p>

@@ -216,7 +216,7 @@ function ExpertiseTags() {
               fontFamily: "'Jost', sans-serif",
               fontSize: 12.5,
               color: PALETTE.forest,
-              background: PALETTE.paper,
+              background: "#c3ea9d",
               border: `1px solid ${PALETTE.line}`,
               borderRadius: 999,
             }}
