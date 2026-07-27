@@ -103,7 +103,7 @@ export default function FaqSection() {
   };
 
   return (
-    <section className="w-full pt-28 px-4 sm:px-8 " id="faq">
+    <section className="w-full pt-28 px-4 sm:px-8 bg-linear-to-b from-[#eef4e7] to-[#EEF4E7] " id="faq">
       <div className="mx-auto max-w-2xl">
         <div className="text-center">
           <h2

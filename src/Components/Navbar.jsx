@@ -1,8 +1,12 @@
 import React, { useState } from 'react'
 import logo from "../assets/logo.png"
-const NAV_LINKS = ['About', 'Services', 'Blog']
-
-
+import { HashLink } from 'react-router-hash-link'
+const NAV_LINKS =[
+ 
+  { label: "About", href: "about-us" },
+  { label: "Services", href: "services" },
+  
+];
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
@@ -11,23 +15,23 @@ export default function Navbar() {
     <header className="absolute inset-x-0 top-0 z-50 w-full bg-transparent">
       <nav className="mx-auto flex max-w-[1600px] items-center justify-between px-6 py-5 sm:px-8 md:px-10 lg:px-14 xl:px-20">
         {/* Logo — static on the left for mobile, absolutely centered on desktop */}
-        <a
-          href="#home"
+        <HashLink
+          to="#home"
           className="flex items-center text-white md:absolute md:left-1/2 md:-translate-x-1/2"
         >
-          <img src={logo} className="w-14 md:w-18" />
-        </a>
+          <img src={logo} className="w-14 md:w-22" />
+        </HashLink>
 
         {/* Desktop nav links */}
         <ul className="hidden items-center gap-8 md:flex xl:gap-10">
           {NAV_LINKS.map((link) => (
-            <li key={link}>
-              <a
-                href={`#${link.toLowerCase()}`}
+            <li key={link.label}>
+              <HashLink
+                to={`#${link.href}`}
                 className="text-sm font-medium tracking-wide text-white/90 transition-colors hover:text-white xl:text-base"
               >
-                {link}
-              </a>
+                {link.label}
+              </HashLink>
             </li>
           ))}
         </ul>
@@ -76,24 +80,23 @@ export default function Navbar() {
       >
         <ul className="flex flex-col items-center gap-6 px-6 py-8">
           {NAV_LINKS.map((link) => (
-            <li key={link}>
+            <li key={link.label}>
               <a
-                href={`#${link.toLowerCase()}`}
+                href={`#${link.href}`}
                 onClick={() => setOpen(false)}
                 className="text-base font-medium tracking-wide text-white/90 hover:text-white"
               >
-                {link}
+                {link.label}
               </a>
             </li>
           ))}
           <li>
-            <a
-              href="#contact"
-              onClick={() => setOpen(false)}
+            <HashLink
+              to="#services"
               className="inline-flex items-center rounded-full bg-white px-7 py-2.5 text-sm font-medium tracking-wide text-[#7C8471] hover:bg-white/90"
             >
-              Contact Us
-            </a>
+              Explore Our Services
+            </HashLink>
           </li>
         </ul>
       </div>

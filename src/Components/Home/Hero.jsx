@@ -21,7 +21,7 @@ export default function HeroSection() {
           type="button"
           className="mt-9 rounded-full border border-[#3F4A33]/30 bg-[#4C5A3D] px-8 py-3.5 text-sm md:text-base font-medium text-white backdrop-blur-sm transition-all duration-300 hover:bg-[#3F4A33] hover:-translate-y-0.5 [font-family:var(--font-body)]"
         >
-          Book a Discovery Session
+          Start Your Journey
         </button>
       </div>
      

@@ -16,7 +16,7 @@ const STAGES = [
   {
     threshold: 0.34,
     text: (
-      <h3 className="text-lg">
+      <h3 className="text-2xl ">
         To make emotional wellness simple, meaningful, 
       </h3>
     ),
@@ -24,7 +24,7 @@ const STAGES = [
   {
     threshold: 0.68,
     text: (
-      <h3 className="text-lg">
+      <h3 className="text-2xl">
         and accessible while helping individuals build resilience, clarity, and emotional balance.
       </h3>
     ),
@@ -255,14 +255,14 @@ export default function OurVisionGallery() {
 
             <div className="relative z-10 flex h-full w-full items-center justify-center px-10">
               {STAGES.map((stage, i) => (
-                <p
+                <h1
                   key={i}
                   ref={(node) => (textRefs.current[i] = node)}
-                  className="absolute max-w-[280px] text-center font-serif text-2xl leading-snug text-neutral-900 will-change-[opacity] md:text-[28px]"
+                  className="absolute max-w-[280px] text-center font-serif leading-snug text-neutral-900 will-change-[opacity] "
                   style={{ opacity: 0 }}
                 >
                   {stage.text}
-                </p>
+                </h1>
               ))}
             </div>
           </div>

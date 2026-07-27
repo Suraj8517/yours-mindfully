@@ -10,7 +10,7 @@ import OurPillars from '../Components/Home/OurPillars'
 import OurMission from '../Components/Home/ourMission'
 import Services from '../Components/Home/Services'
 import HowToWorkWithUs from '../Components/Home/HowItWorks'
-import MeetYourTherapist from '../Components/Home/AboutArthi'
+import {MeetYourTherapist} from '../Components/Home/AboutArthi'
 import Footer from '../Components/Home/footer'
 
 export default function Home
@@ -22,8 +22,7 @@ export default function Home
          <TextSection/>
          <DetailedSection/> 
           <AboutUs/>  
-         <OurVision/>  
-        
+         <OurVision/>       
   <OurMission/>
   <OurPillars/>
   <Services/>

@@ -434,7 +434,7 @@ export default function StackingValues() {
   }, []);
 
   return (
-    <div style={{ background: "#FAFAF8", fontFamily: "Inter, sans-serif" }}>
+    <div style={{ background: "#FAFAF8", fontFamily: "Inter, sans-serif" }} id="services">
       <style>{`
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
