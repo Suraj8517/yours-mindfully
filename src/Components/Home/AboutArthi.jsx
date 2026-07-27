@@ -42,7 +42,7 @@ const CREDENTIALS = [
   {
     title: "Member",
     org: "Counsellors Council of India (CCI)",
-    icon: Users,
+    icon: Award,
   },
   {
     title: "Associate Counsellor",
@@ -52,17 +52,17 @@ const CREDENTIALS = [
   {
     title: "Certified Shadow Mastery Coach",
     org: "",
-    icon: Sparkles,
+    icon: Award,
   },
   {
     title: "Trained Imago Relationship Therapist",
     org: "",
-    icon: HeartHandshake,
+    icon: Award,
   },
   {
     title: "Lifetime Achievement Award",
     org: "Mental Health Awareness",
-    icon: Trophy,
+    icon: Award,
   },
 ];
 
@@ -176,7 +176,7 @@ function BreathingPortrait() {
           <User size={14} style={{ color: PALETTE.gold }} />
         </span>
         <div className="leading-tight">
-         
+         <h3 className="font-bold " style={{color:ROSE}}>Arthi Sujai</h3>
           <p
             style={{
               fontFamily: "'IBM Plex Mono', monospace",
@@ -263,13 +263,8 @@ function CredentialsBand() {
                 <div
                   className="h-full pt-5 lg:pr-4"
                 >
-                  <span
-                    className="flex h-11 w-11 items-center justify-center rounded-full mb-4"
-                    style={{ background:PALETTE.paper }}
-                  >
-                    <Icon size={18} strokeWidth={1.8} style={{ color: ROSE }} />
-                  </span>
-                  <p
+                 
+                  <p className="text-center"
                     style={{
                       fontFamily: "'Fraunces', serif",
                       fontSize: 16,
@@ -281,7 +276,8 @@ function CredentialsBand() {
                   </p>
                   {item.org && (
                     <p
-                      className="mt-1.5"
+                      className="mt-1.5 text-center
+                      "
                       style={{
                         fontFamily: "'Jost', sans-serif",
                         fontSize: 12.5,

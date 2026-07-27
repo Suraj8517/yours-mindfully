@@ -47,7 +47,7 @@ function FaqItem({ faq, isOpen, onToggle }) {
         </span>
         <span
           className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-900 transition-transform duration-300 ${
-            isOpen ? "rotate-45 border-teal-300 bg-teal-50" : ""
+            isOpen ? "rotate-45 border-[#cbff9a] bg-[#edf3e6]" : ""
           }`}
         >
           <Plus className="h-4 w-4" strokeWidth={2} />

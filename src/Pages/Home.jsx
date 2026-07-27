@@ -12,6 +12,7 @@ import Services from '../Components/Home/Services'
 import HowToWorkWithUs from '../Components/Home/HowItWorks'
 import {MeetYourTherapist} from '../Components/Home/AboutArthi'
 import Footer from '../Components/Home/footer'
+import CTASection from '../Components/Home/ctaSection'
 
 export default function Home
 () {
@@ -29,6 +30,7 @@ export default function Home
   <HowToWorkWithUs/>
   <MeetYourTherapist/>
     <FaqSection />
+    <CTASection/>
     <Footer/>
     </div>
   )

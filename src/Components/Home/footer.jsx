@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link2, Check, ArrowUp } from "lucide-react";
 import logo from "../../assets/logo.png"
-import { HashLink } from "react-router-hash-link";
 const quickLinks = [
   { label: "Therapist", href: "#therapist" },
   { label: "About", href: "#about-us" },
@@ -21,31 +20,22 @@ const SOCIAL_LINKS = [
         <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" />
       </svg>
     ),
-    href: "#",
+    href: "https://www.instagram.com/mindfullyyouuu?igsh=OG81NDljcW1lbWpv",
   },
   {
-    label: "Facebook",
+    label: "Phone",
     icon: (
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M22 12.06C22 6.505 17.523 2 12 2S2 6.505 2 12.06c0 5.022 3.657 9.184 8.438 9.94v-7.03H7.898v-2.91h2.54V9.845c0-2.522 1.492-3.915 3.777-3.915 1.094 0 2.238.197 2.238.197v2.476h-1.26c-1.243 0-1.63.775-1.63 1.57v1.888h2.773l-.443 2.91h-2.33V22c4.78-.756 8.437-4.918 8.437-9.94z" />
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
       </svg>
     ),
-    href: "#",
-  },
-  {
-    label: "YouTube",
-    icon: (
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M23.498 6.186a2.994 2.994 0 0 0-2.107-2.12C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.391.521a2.994 2.994 0 0 0-2.107 2.12A31.29 31.29 0 0 0 0 12a31.29 31.29 0 0 0 .502 5.814 2.994 2.994 0 0 0 2.107 2.12c1.886.521 9.391.521 9.391.521s7.505 0 9.391-.521a2.994 2.994 0 0 0 2.107-2.12A31.29 31.29 0 0 0 24 12a31.29 31.29 0 0 0-.502-5.814zM9.6 15.568V8.432L15.818 12 9.6 15.568z" />
-      </svg>
-    ),
-    href: "#",
+    href: "tel:+918825611379",
   },
 ];
 
 export default function Footer() {
   const [copied, setCopied] = useState(false);
-  const email = "hello@mindfullyyou.com";
+  const email = "mindfullyyouu@gmail.com ";
 
   const handleCopy = async () => {
     try {
@@ -87,14 +77,16 @@ export default function Footer() {
 
             <div className="mt-4 flex items-center gap-2.5">
               {SOCIAL_LINKS.map(({ label, icon, href }) => (
-                <HashLink
+                <a
                   key={label}
                   href={href}
                   aria-label={label}
+                  target={href.startsWith("http") ? "_blank" : undefined}
+                  rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
                   className="flex h-8 w-8 items-center justify-center rounded-full border border-[#D9CFB4] text-[#2B3A32] transition-colors hover:border-[#B4784F] hover:text-[#B4784F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#B4784F]"
                 >
                   {icon}
-                </HashLink>
+                </a>
               ))}
             </div>
           </div>
