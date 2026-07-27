@@ -1,31 +1,30 @@
 import React from "react";
+import img1 from "../../assets/hero/img1.webp"
+import img2 from "../../assets/hero/img2.webp"
+import img3 from "../../assets/hero/img3.webp"
+import img4 from "../../assets/hero/img4.webp"
+import img5 from "../../assets/hero/img5.webp"
 
-/**
- * Full-height image strip that scrolls continuously left,
- * with images alternating up/down in a zigzag, looping seamlessly.
- *
- * Swap the `images` array with your own URLs — captions are optional.
- */
 const images = [
   {
-    src: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1200&auto=format&fit=crop",
-    alt: "Mediterranean mezze spread with hummus and olives",
+    src: img1,
+    alt: "group of women",
   },
   {
-    src: "https://images.unsplash.com/photo-1600334129128-685c5582fd35?q=80&w=1200&auto=format&fit=crop",
-    alt: "Singing bowl and palo santo ritual",
+    src: img2,
+    alt: "meditation",
   },
   {
-    src: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1200&auto=format&fit=crop",
-    alt: "Sound bath session on yoga mats",
+    src: img3,
+    alt: "relation",
   },
   {
-    src: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=1200&auto=format&fit=crop",
-    alt: "Fresh vegetable and dip platter",
+    src: img4,
+    alt: "group",
   },
   {
-    src: "https://images.unsplash.com/photo-1545205597-3d9d02c29597?q=80&w=1200&auto=format&fit=crop",
-    alt: "Meditation cushion by a sunlit window",
+    src: img5,
+    alt: "women meditating",
   },
 ];
 

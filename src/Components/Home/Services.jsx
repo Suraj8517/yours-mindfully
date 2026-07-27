@@ -11,19 +11,13 @@ import {
   ArrowRight,
 } from "lucide-react";
 
-/**
- * "Choose the Support That's Right for You" — true stacking scroll cards.
- *
- * All cards live inside ONE pinned (sticky) viewport-height section.
- * As you scroll:
- *  - card 0 sits still, fully visible
- *  - once the NEXT card starts arriving, card 0 stays perfectly still
- *    (no drift) and only shrinks + fades FULLY OUT in place, while card 1
- *    physically slides up from off-screen bottom and covers it
- *  - card 2 then slides up and covers card 1, and so on
- * Positions are read from scroll on every frame and written straight to
- * refs (no React state), so it stays smooth.
- */
+import clarity  from '../../assets/services/clarity.webp' 
+import relation  from '../../assets/services/relationship.webp' 
+import emotional  from '../../assets/services/emotional wellness.webp' 
+import community  from '../../assets/services/community.webp' 
+import journey  from '../../assets/services/journey.webp' 
+import growth  from '../../assets/services/growth.webp' 
+import webinars  from '../../assets/services/webinars.webp' 
 
 const HOLD = 70; // vh of scroll where the active card just sits still (reading time)
 const TRANS = 100; // vh of scroll for the "next card slides up and covers" transition
@@ -44,7 +38,7 @@ const VALUES = [
     icon: MessageCircle,
     accent: "#3B6E8F",
     tint: "#EEF3F6",
-    image: "https://images.unsplash.com/photo-1573497491208-6b1acb260507?auto=format&fit=crop&w=800&q=70",
+    image: clarity,
     tagsLabel: "Ideal for",
     tags: [
       "Stress & burnout",
@@ -76,7 +70,7 @@ const VALUES = [
     icon: HeartHandshake,
     accent: "#4C7A46",
     tint: "#EEF4EC",
-    image: "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?auto=format&fit=crop&w=800&q=70",
+    image: growth,
     tagsLabel: "We help with",
     tags: [
       "Anxiety",
@@ -110,7 +104,7 @@ const VALUES = [
     icon: Users,
     accent: "#A24B52",
     tint: "#F6EDEE",
-    image: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=70",
+    image: relation,
     tagsLabel: "Our services",
     subServices: [
       { name: "Relationship Readiness", desc: "Prepare yourself emotionally before entering a committed relationship or marriage." },
@@ -138,7 +132,7 @@ const VALUES = [
     icon: Layers,
     accent: "#B08222",
     tint: "#F8F1E2",
-    image: "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=800&q=70",
+    image: emotional,
     tagsLabel: null,
     tags: [],
     gainsLabel: "Program benefits",
@@ -162,7 +156,7 @@ const VALUES = [
     icon: BookOpen,
     accent: "#6E4E8C",
     tint: "#F1EDF5",
-    image: "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?auto=format&fit=crop&w=800&q=70",
+    image: journey,
     tagsLabel: "Topics include",
     tags: [
       "Emotional awareness",
@@ -195,7 +189,7 @@ const VALUES = [
     icon: Video,
     accent: "#A15A28",
     tint: "#F7EFE7",
-    image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=70",
+    image: webinars,
     tagsLabel: "Topics include",
     tags: [
       "Relationship healing",
@@ -226,7 +220,7 @@ const VALUES = [
     icon: UsersRound,
     accent: "#33746A",
     tint: "#EAF3F1",
-    image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=70",
+    image: community,
     tagsLabel: null,
     tags: [],
     gainsLabel: "Community includes",

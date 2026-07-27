@@ -1,37 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import img1 from "../../assets/pillars/educate.jpg"
-import img2 from "../../assets/pillars/community.jpg"
-import img3 from "../../assets/pillars/empower.jpg"
-import img4 from "../../assets/pillars/well.jpg"
+import img1 from "../../assets/pillars/educate.webp"
+import img2 from "../../assets/pillars/community.webp"
+import img3 from "../../assets/pillars/empower.webp"
+import img4 from "../../assets/pillars/well.webp"
 
 
-/**
- * "Our materials" scroll-pinned section.
- *
- * Behaviour:
- * 1. The whole section scrolls up normally with the page.
- * 2. Once its top edge reaches the top of the viewport, the section "locks":
- *    the left column (title) becomes fixed/sticky, and only the right
- *    column's content scrolls internally, panel by panel.
- * 3. Once the last right-column panel has fully scrolled through, the
- *    section unlocks and the page resumes normal scrolling past it.
- *
- * Implementation notes:
- * - The outer wrapper's height is set to exactly
- *   `100vh + (slides.length - 1) * STEP_VH`. The extra part beyond the
- *   first 100vh is the ONLY scroll distance the animation gets — so the
- *   scroll distance you travel while pinned is identical to the distance
- *   the stacked panels visually travel. That means progress hits 1 (last
- *   card fully in view) at exactly the same scroll position where the
- *   wrapper runs out of height and `sticky` naturally releases — no dead
- *   scroll space before or after.
- * - An inner element is `sticky top-0 h-screen` — this is what pins.
- * - Progress (0 -> 1) is derived from how far we've scrolled through the
- *   wrapper, and used to translateY the stacked right-column panels.
- */
-
-// Tune these to control card sizing/spacing precisely, per breakpoint.
-// Tailwind's `2xl` breakpoint is 1536px.
 const CARD_HEIGHT_VH_XL = 72; // card height below 1536px (xl and smaller)
 const CARD_HEIGHT_VH_2XL = 68; // card height at 1536px and above
 const CARD_GAP_VH = 4; // vertical gap between stacked cards, in vh
