@@ -165,7 +165,7 @@ export default function OurVisionGallery() {
   return (
     <>
     {/* Mobile — plain static layout, no scroll animation, blob as background art */}
-    <section className="relative block w-full overflow-hidden bg-[#FCFBF8] px-6 py-16 md:hidden">
+    <section className="relative block w-full overflow-hidden bg-[#FCFBF8] px-6 py-8 md:hidden">
     
       <div className="relative z-10 flex flex-col items-center gap-6 text-center">
         <h1 className="text-4xl font-black text-green-900">Our Vision</h1>
@@ -179,7 +179,7 @@ export default function OurVisionGallery() {
           <img
             src={portraitImg}
             alt=""
-            className="h-[300px] w-[220px] flex-shrink-0 rounded-2xl object-cover"
+            className="h-[360px] w-[280px] flex-shrink-0 rounded-2xl object-cover"
           />
         
         </div>

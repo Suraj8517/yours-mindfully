@@ -269,14 +269,14 @@ function Panel({ accent, image, Icon, title }) {
       <div className="absolute inset-0 flex items-center justify-center sm:items-start sm:justify-start sm:p-6 2xl:p-9">
   <div className="flex items-center gap-3 rounded-full bg-black/40 backdrop-blur-md px-4 py-3 2xl:gap-4 2xl:px-4 2xl:py-3">
     <div
-      className="flex h-12 w-12 items-center justify-center rounded-full bg-white sm:h-11 sm:w-11 2xl:h-12 2xl:w-14"
+      className="flex h-10 w-10 items-center justify-center rounded-full bg-white sm:h-11 sm:w-11 2xl:h-12 2xl:w-14"
     >
       <Icon size={19} strokeWidth={1.6} color={accent} className="2xl:hidden block" />
       <Icon size={24} strokeWidth={1.6} color={accent} className="hidden 2xl:block" />
     </div>
 
     <h2
-      className="text-xl font-extrabold text-white whitespace-nowrap 2xl:text-[1.25rem]"
+      className="text-lg font-extrabold text-white whitespace-nowrap 2xl:text-[1.25rem]"
       style={{ fontFamily: "'Fraunces', serif", fontWeight: 600, letterSpacing: "-0.01em" }}
     >
       {title}
