@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   MessageCircle,
   HeartHandshake,
@@ -9,6 +9,8 @@ import {
   UsersRound,
   HeartIcon,
   ArrowRight,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 
 import clarity  from '../../assets/services/clarity.webp' 
@@ -243,7 +245,7 @@ const clamp = (v, a, b) => Math.min(Math.max(v, a), b);
 function Panel({ accent, image, Icon, title }) {
   return (
     <div
-      className="relative aspect-[16/9] max-h-38 w-full shrink-0 overflow-hidden rounded-xl sm:aspect-auto sm:max-h-none sm:h-full sm:w-[42%] 2xl:w-[40%] sm:self-stretch sm:rounded-[3.5rem] 2xl:rounded-[4rem]"
+      className="relative aspect-[16/9] max-h-28 w-full shrink-0 overflow-hidden rounded-xl sm:aspect-auto sm:max-h-none sm:h-full sm:w-[42%] 2xl:w-[40%] sm:self-stretch sm:rounded-[3.5rem] 2xl:rounded-[4rem]"
     >
       <img
         src={image}
@@ -333,6 +335,38 @@ export default function StackingValues() {
   const containerRef = useRef(null);
   const cardRefs = useRef([]);
   const fontLoaded = useRef(false);
+
+  // Mobile horizontal-scroll carousel state
+  const mobileScrollRef = useRef(null);
+  const mobileCardRefs = useRef([]);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const scrollToIndex = (idx) => {
+    const container = mobileScrollRef.current;
+    const card = mobileCardRefs.current[idx];
+    if (!container || !card) return;
+    container.scrollTo({ left: card.offsetLeft - 20, behavior: "smooth" });
+  };
+
+  const handlePrev = () => scrollToIndex(Math.max(0, activeIndex - 1));
+  const handleNext = () => scrollToIndex(Math.min(N - 1, activeIndex + 1));
+
+  const handleMobileScroll = () => {
+    const container = mobileScrollRef.current;
+    if (!container) return;
+    const scrollLeft = container.scrollLeft;
+    let closest = 0;
+    let minDist = Infinity;
+    mobileCardRefs.current.forEach((el, i) => {
+      if (!el) return;
+      const dist = Math.abs(el.offsetLeft - 20 - scrollLeft);
+      if (dist < minDist) {
+        minDist = dist;
+        closest = i;
+      }
+    });
+    setActiveIndex(closest);
+  };
 
   useEffect(() => {
     if (!fontLoaded.current) {
@@ -435,8 +469,8 @@ export default function StackingValues() {
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
 
-      {/* Pinned stacking section — heading lives inside the sticky area so it
-          stays put on screen while the cards scroll and stack beneath it */}
+      {/* Pinned stacking section — desktop / tablet only. Untouched. */}
+      <div className="hidden sm:block">
       <div ref={containerRef} className="relative" style={{ height: `${TOTAL_SCROLL_VH + 100}vh` }}>
         <div className="sticky top-0 flex h-screen flex-col overflow-hidden">
           <div className="mx-auto w-full max-w-5xl shrink-0 px-5 pb-2 pt-5 sm:pb-2 sm:pt-3 2xl:max-w-6xl 2xl:pt-16 2xl:pb-5">
@@ -575,6 +609,184 @@ export default function StackingValues() {
             );
           })}
           </div>
+        </div>
+      </div>
+      </div>
+
+      {/* Mobile-only horizontal scroll carousel — completely separate from
+          the desktop pinned/stacking design above */}
+      <div className="block sm:hidden py-8">
+        <div className="px-5 mb-5">
+          <p className="mb-1 text-[0.62rem] font-medium uppercase tracking-[0.14em] text-[#9A9C93]">
+            Emotional wellness, tailored to you
+          </p>
+          <h2
+            className="max-w-xs text-[1.5rem] leading-[1.12] tracking-[-0.01em] text-[#E46F83]"
+            style={{ fontFamily: "'Fraunces', serif", fontWeight: 600, fontOpticalSizing: "auto" }}
+          >
+            Choose the support that's right for you
+          </h2>
+        </div>
+
+        <div
+          ref={mobileScrollRef}
+          onScroll={handleMobileScroll}
+          className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-2 scroll-smooth"
+        >
+          {VALUES.map((value, i) => {
+            const Icon = value.icon;
+            return (
+              <div
+                key={value.title}
+                ref={(el) => (mobileCardRefs.current[i] = el)}
+                className="flex h-[30rem] w-[80vw] max-w-[320px] shrink-0 snap-start flex-col overflow-hidden rounded-[1.5rem] border border-black/[0.06] bg-white shadow-[inset_0_0_0_2px_rgba(155,177,120,0.18),inset_0_4px_24px_8px_rgba(155,177,120,0.22)]"
+              >
+                <div className="relative h-36 w-full shrink-0 overflow-hidden">
+                  <img
+                    src={value.image}
+                    alt=""
+                    loading="lazy"
+                    className="absolute inset-0 h-full w-full object-cover"
+                  />
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      background: `linear-gradient(165deg, ${value.accent}66 0%, ${value.accent}1a 55%, ${value.accent}00 80%)`,
+                    }}
+                  />
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      background:
+                        "linear-gradient(0deg, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0) 45%)",
+                    }}
+                  />
+                  <div className="absolute inset-0 flex items-start p-3">
+                    <div className="flex items-center gap-2 rounded-full bg-black/40 px-3 py-2 backdrop-blur-md">
+                      <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white">
+                        <Icon size={16} strokeWidth={1.6} color={value.accent} />
+                      </div>
+                      <h3
+                        className="whitespace-nowrap text-[0.85rem] font-extrabold text-white"
+                        style={{ fontFamily: "'Fraunces', serif", fontWeight: 600, letterSpacing: "-0.01em" }}
+                      >
+                        {value.title}
+                      </h3>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex min-h-0 flex-1 flex-col p-4">
+                  <div className="shrink-0">
+                    <p
+                      className="text-[0.72rem] leading-snug"
+                      style={{ color: value.accent, fontFamily: "'Fraunces', serif", fontStyle: "italic", fontWeight: 500 }}
+                    >
+                      {value.subtitle}
+                    </p>
+                    <p className="mt-1.5 text-[0.75rem] leading-snug text-[#68695F]/90">
+                      {value.body}
+                    </p>
+                  </div>
+
+                  <div className="no-scrollbar mt-2 flex flex-1 flex-col overflow-y-auto pr-1">
+                    {value.subServices && (
+                      <div className="mb-2">
+                        <p className="mb-1.5 text-[0.6rem] font-semibold uppercase tracking-[0.08em] text-[#A0A196]">
+                          {value.tagsLabel}
+                        </p>
+                        <ul className="flex flex-col gap-1.5">
+                          {value.subServices.map((s) => (
+                            <SubServiceRow key={s.name} name={s.name} desc={s.desc} accent={value.accent} />
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {!value.subServices && value.tagsLabel && (
+                      <div className="mb-2">
+                        <p className="mb-1.5 text-[0.6rem] font-semibold uppercase tracking-[0.08em] text-[#A0A196]">
+                          {value.tagsLabel}
+                        </p>
+                        <div className="flex flex-wrap gap-1">
+                          {value.tags.map((tag) => (
+                            <TagChip key={tag} label={tag} />
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    <div>
+                      <p className="mb-1.5 text-[0.6rem] font-semibold uppercase tracking-[0.08em] text-[#A0A196]">
+                        {value.gainsLabel}
+                      </p>
+                      <ul className="grid grid-cols-2 gap-1">
+                        {value.gains.map((gain) => (
+                          <GainRow key={gain} text={gain} accent={value.accent} />
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div className="mt-2 flex shrink-0 flex-wrap items-center gap-2 border-t border-black/[0.06] pt-2.5">
+                    <button
+                      type="button"
+                      className="inline-flex items-center gap-1.5 rounded-full bg-[#161715] px-4 py-2 text-[0.68rem] font-medium text-white active:opacity-70"
+                    >
+                      {value.cta}
+                      <ArrowRight size={13} strokeWidth={2} />
+                    </button>
+                    {value.cta2 && (
+                      <button
+                        type="button"
+                        className="inline-flex items-center gap-1.5 rounded-full border border-black/[0.12] bg-white px-4 py-2 text-[0.68rem] font-medium text-[#161715] active:opacity-55"
+                      >
+                        {value.cta2}
+                        <ArrowRight size={13} strokeWidth={2} />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Navigation controls */}
+        <div className="mt-4 flex items-center justify-center gap-4 px-5">
+          <button
+            type="button"
+            onClick={handlePrev}
+            disabled={activeIndex === 0}
+            aria-label="Previous"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-black/[0.12] bg-white text-[#161715] transition-opacity disabled:opacity-30 active:opacity-60"
+          >
+            <ChevronLeft size={18} strokeWidth={2} />
+          </button>
+
+          <div className="flex items-center gap-1.5">
+            {VALUES.map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                aria-label={`Go to slide ${i + 1}`}
+                onClick={() => scrollToIndex(i)}
+                className={`h-1.5 rounded-full transition-all duration-200 ${
+                  i === activeIndex ? "w-5 bg-[#161715]" : "w-1.5 bg-black/15"
+                }`}
+              />
+            ))}
+          </div>
+
+          <button
+            type="button"
+            onClick={handleNext}
+            disabled={activeIndex === N - 1}
+            aria-label="Next"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-black/[0.12] bg-white text-[#161715] transition-opacity disabled:opacity-30 active:opacity-60"
+          >
+            <ChevronRight size={18} strokeWidth={2} />
+          </button>
         </div>
       </div>
 
