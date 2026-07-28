@@ -243,7 +243,7 @@ const clamp = (v, a, b) => Math.min(Math.max(v, a), b);
 function Panel({ accent, image, Icon, title }) {
   return (
     <div
-      className="relative aspect-[16/9] max-h-28 w-full shrink-0 overflow-hidden rounded-xl sm:aspect-auto sm:max-h-none sm:h-full sm:w-[42%] 2xl:w-[40%] sm:self-stretch sm:rounded-[3.5rem] 2xl:rounded-[4rem]"
+      className="relative aspect-[16/9] max-h-38 w-full shrink-0 overflow-hidden rounded-xl sm:aspect-auto sm:max-h-none sm:h-full sm:w-[42%] 2xl:w-[40%] sm:self-stretch sm:rounded-[3.5rem] 2xl:rounded-[4rem]"
     >
       <img
         src={image}
